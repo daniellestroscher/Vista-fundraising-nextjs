@@ -6,18 +6,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className='title'>
+          <h2 className='name'>Fundinator,</h2>
+          <h4>support projects that make a difference.</h4>
+        </div>
+        <nav className='nav'>
+          <h3><a href=''>Find places to give.</a></h3>
+          <h3>Create a new funding project.</h3>
+          <h3>My funding projects.</h3>
+          <h3>Places i support.</h3>
+        </nav>
+
+
       </header>
     </div>
   );
