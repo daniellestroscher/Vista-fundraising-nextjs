@@ -1,4 +1,4 @@
-export const marketAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1";
+export const marketAddress = "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB";
 export const marketAbi = [
   {
     anonymous: false,
@@ -43,7 +43,7 @@ export const marketAbi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "_value",
         type: "uint256",
       },
     ],
@@ -54,35 +54,7 @@ export const marketAbi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "fundContract",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
         name: "_goal",
-        type: "uint256",
-      },
-    ],
-    name: "checkActiveStatus",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_goal",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_minContribution",
         type: "uint256",
       },
       {
@@ -138,7 +110,7 @@ export const marketAbi = [
         type: "tuple[]",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -276,6 +248,19 @@ export const marketAbi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_fundContract",
+        type: "address",
+      },
+    ],
+    name: "setGoalReached",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
 export const CrowdfundAbi = [
   {
@@ -285,14 +270,28 @@ export const CrowdfundAbi = [
         name: "_goal",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "_minContribution",
-        type: "uint256",
-      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_checkAddress",
+        type: "address",
+      },
+    ],
+    name: "checkIfContributor",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],

@@ -10,8 +10,8 @@ import "./Crowdfund.sol";
 contract CrowdfundMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _funraiserIds;
-    //Counters.Counter public _fundsGoalsMet;
-    uint public _fundsGoalsMet;
+    Counters.Counter public _fundsGoalsMet;
+    //uint public _fundsGoalsMet;
 
     struct CrowdfundObj {
         uint fundId;
@@ -22,6 +22,7 @@ contract CrowdfundMarket is ReentrancyGuard {
         bool goalReached;
     }
     mapping(uint => CrowdfundObj) idToCrowdfund;
+    mapping(address => uint) addressToId;
 
     event CrowdfundCreated(
         uint indexed fundId,
@@ -33,14 +34,14 @@ contract CrowdfundMarket is ReentrancyGuard {
 
     function createCrowdfund(
         uint _goal,
-        uint _minContribution,
         string memory _metaUrl
     ) public nonReentrant {
         _funraiserIds.increment();
         uint fundId = _funraiserIds.current();
 
-        Crowdfund crowdfundContract = new Crowdfund(_goal, _minContribution);
+        Crowdfund crowdfundContract = new Crowdfund(_goal);
         address crowdfundContractAddress = address(crowdfundContract);
+        addressToId[crowdfundContractAddress] = fundId;
 
         idToCrowdfund[fundId] = CrowdfundObj(
             fundId,
@@ -60,30 +61,18 @@ contract CrowdfundMarket is ReentrancyGuard {
         );
     }
 
-    function checkActiveStatus(
-        uint _id,
-        address fundContract,
-        uint _goal
-    ) public {
-        if (address(fundContract).balance >= _goal) {
-            idToCrowdfund[_id].goalReached = true;
-            _fundsGoalsMet++;
-        }
+    function setGoalReached(address _fundContract) public {
+      uint contractId = addressToId[_fundContract];
+      idToCrowdfund[contractId].goalReached = true;
+      _fundsGoalsMet.increment();
     }
 
-    function getActiveFundraisers() public returns (CrowdfundObj[] memory) {
+    function getActiveFundraisers() public view returns (CrowdfundObj[] memory) {
         uint fundraisersCount = _funraiserIds.current();
-        for (uint i = 0; i < fundraisersCount; i++) {
-            checkActiveStatus(
-                i + 1,
-                idToCrowdfund[i + 1].crowdfundContract,
-                idToCrowdfund[i + 1].goal
-            );
-        }
-        uint goalNotReached = _funraiserIds.current() - _fundsGoalsMet;
+        uint goalNotReachedCount = _funraiserIds.current() - _fundsGoalsMet.current();
         uint index = 0;
 
-        CrowdfundObj[] memory fundraisers = new CrowdfundObj[](goalNotReached);
+        CrowdfundObj[] memory fundraisers = new CrowdfundObj[](goalNotReachedCount);
 
         for (uint i = 0; i < fundraisersCount; i++) {
             if (!idToCrowdfund[i + 1].goalReached) {

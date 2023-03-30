@@ -93,7 +93,7 @@ function Create() {
       signer
     );
 
-    let transaction = await marketContract.createCrowdfund(goal, 1, url);
+    let transaction = await marketContract.createCrowdfund(goal, url);
     await transaction.wait();
     navigate("/")
   }

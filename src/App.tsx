@@ -25,7 +25,7 @@ function App() {
             <h3>My funding projects.</h3>
           </a>
           <a href="/i-support">
-            <h3>Places i support.</h3>
+            <h3>Funding project's i support.</h3>
           </a>
         </nav>
       </header>
