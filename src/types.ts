@@ -12,6 +12,7 @@ export interface CrowdfundWithMeta {
   name: string;
   description: string;
   image: string;
+  category: string;
   owner: string;
   goal: number;
   goalReached: boolean;

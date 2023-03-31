@@ -1,4 +1,4 @@
-export const marketAddress = "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB";
+export const marketAddress = "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8";
 export const marketAbi = [
   {
     anonymous: false,
@@ -108,6 +108,57 @@ export const marketAbi = [
         internalType: "struct CrowdfundMarket.CrowdfundObj[]",
         name: "",
         type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "getCrowdfund",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "fundId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "metaUrl",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "crowdfundContract",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "goal",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "goalReached",
+            type: "bool",
+          },
+        ],
+        internalType: "struct CrowdfundMarket.CrowdfundObj",
+        name: "",
+        type: "tuple",
       },
     ],
     stateMutability: "view",

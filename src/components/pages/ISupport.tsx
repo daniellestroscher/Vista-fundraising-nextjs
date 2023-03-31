@@ -40,6 +40,7 @@ function ISupport() {
           name: meta.data.name,
           description: meta.data.description,
           image: meta.data.image,
+          category: meta.data.category,
           owner: crowdfund.owner,
           goal: Number(crowdfund.goal),
           goalReached: crowdfund.goalReached,
@@ -75,13 +76,12 @@ function ISupport() {
       if (donatedToContract) {
         donated.push(crowdfundList[i]);
       }
-      console.log(donated, "donated[]");
       return donated;
     }
   }
 
   if (loadingState === "loaded" && !crowdfundArr.length) {
-    return <h2>You don't support any crowdfunds.</h2>;
+    return <h2>You don't support any active crowdfunds.</h2>;
   }
   return (
     <div>

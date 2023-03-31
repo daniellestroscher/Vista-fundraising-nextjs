@@ -5,6 +5,7 @@ import Discover from "./components/pages/Discover";
 import Create from "./components/pages/Create";
 import MyProjects from "./components/pages/MyProjects";
 import ISupport from "./components/pages/ISupport";
+import ProjectInfo from "./components/pages/ProjectInfo";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/my-projects" element={<MyProjects />} />
           <Route path="/i-support" element={<ISupport />} />
+          <Route path="/projects/:id" element={<ProjectInfo />} />
         </Routes>
       </Router>
     </div>

@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Create.css";
+import DropdownMenu from "../custom-dropdown";
+
 import Web3Modal from "web3modal";
 //@ts-ignore
 import { create } from "ipfs-http-client";
-
 import { marketAddress, marketAbi } from "../../config";
-import { AbiItem } from "web3-utils";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
@@ -37,7 +37,7 @@ function Create() {
     name: "",
     description: "",
     goal: 0,
-    minContribution: 0,
+    category: "",
   });
   let navigate = useNavigate();
 
@@ -56,9 +56,9 @@ function Create() {
   }
 
   async function createCrowdfund() {
-    const { name, description, goal } = formInput;
-    console.log(name, description, goal, fileUrl);
-    if (!name || !description || !goal || !fileUrl) {
+    const { name, description, goal, category } = formInput;
+    console.log(name, description, goal, category, fileUrl);
+    if (!name || !description || !goal || !fileUrl || !category) {
       alert("all felids are required");
       return;
     }
@@ -67,6 +67,7 @@ function Create() {
       name,
       description,
       goal,
+      category,
       image: fileUrl,
     });
 
@@ -95,7 +96,7 @@ function Create() {
 
     let transaction = await marketContract.createCrowdfund(goal, url);
     await transaction.wait();
-    navigate("/")
+    navigate("/");
   }
 
   return (
@@ -121,6 +122,8 @@ function Create() {
             setFormInput({ ...formInput, goal: Number(e.target.value) })
           }
         />
+        <DropdownMenu setFormInput={setFormInput} formInput={formInput}/>
+
         <input type="file" name="Asset" className="" onChange={onFileChange} />
         {fileUrl && <img className="" width="350" src={fileUrl} />}
         <button onClick={createCrowdfund} className="submit">

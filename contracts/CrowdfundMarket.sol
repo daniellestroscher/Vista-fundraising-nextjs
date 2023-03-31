@@ -67,6 +67,10 @@ contract CrowdfundMarket is ReentrancyGuard {
       _fundsGoalsMet.increment();
     }
 
+    function getCrowdfund(uint _id) public view returns (CrowdfundObj memory) {
+      return idToCrowdfund[_id];
+    }
+
     function getActiveFundraisers() public view returns (CrowdfundObj[] memory) {
         uint fundraisersCount = _funraiserIds.current();
         uint goalNotReachedCount = _funraiserIds.current() - _fundsGoalsMet.current();

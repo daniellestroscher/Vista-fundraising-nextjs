@@ -40,6 +40,7 @@ function MyProjects() {
           name: meta.data.name,
           description: meta.data.description,
           image: meta.data.image,
+          category: meta.data.category,
           owner: crowdfund.owner,
           goal: Number(crowdfund.goal),
           goalReached: crowdfund.goalReached,
