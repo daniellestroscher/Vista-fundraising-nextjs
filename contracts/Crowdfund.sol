@@ -6,7 +6,7 @@ pragma solidity ^0.8.19;
 // import "hardhat/console.sol";
 
 contract Crowdfund {
-  uint goal;
+  uint public goal;
   address CrowdfundOwner;
 
   mapping (address => uint) addressToContribution;
@@ -34,7 +34,7 @@ contract Crowdfund {
     }
 
     function withdraw() public onlyOwner {
-      require (address(this).balance > 0, "sorry, nothing to withdraw");
+      require (address(this).balance > 0, "sorry, nothing to withdraw.");
       payable(CrowdfundOwner).transfer(address(this).balance);
     }
 

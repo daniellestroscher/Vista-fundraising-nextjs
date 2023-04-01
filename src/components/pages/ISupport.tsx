@@ -81,7 +81,7 @@ function ISupport() {
   }
 
   if (loadingState === "loaded" && !crowdfundArr.length) {
-    return <h2>You don't support any active crowdfunds.</h2>;
+    return <h2>You don't support any active projects.</h2>;
   }
   return (
     <div>

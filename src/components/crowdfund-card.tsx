@@ -78,7 +78,7 @@ function CrowdfundCard({ crowdfund }: props) {
     <>
       {!crowdfund.goalReached ? (
         <div className="container">
-          <a href={`/projects/${crowdfund.fundId}`}>
+          {/* <a href={`/projects/${crowdfund.fundId}`}> */}
             <div className="crowdfund-item">
               <img src={crowdfund.image} width={350} className="image" />
               <section className="info">
@@ -139,7 +139,7 @@ function CrowdfundCard({ crowdfund }: props) {
                 </div>
               </section>
             </div>
-          </a>
+          {/* </a> */}
         </div>
       ) : (
         <div className="crowdfund-item-completed">

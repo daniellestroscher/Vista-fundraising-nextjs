@@ -103,12 +103,12 @@ function Create() {
     <div className="page">
       <div className="form">
         <input
-          placeholder="Asset Name"
+          placeholder="Name"
           className="input"
           onChange={(e) => setFormInput({ ...formInput, name: e.target.value })}
         />
         <textarea
-          placeholder="Asset Description"
+          placeholder="Description"
           className="input"
           onChange={(e) =>
             setFormInput({ ...formInput, description: e.target.value })
