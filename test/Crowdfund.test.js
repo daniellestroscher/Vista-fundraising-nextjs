@@ -23,7 +23,7 @@ describe("Crowdfund", function () {
   }
   async function deployAndAddBalance() {
     const { crowdfund, owner, otherAccount } = await loadFixture(deployCrowdfundFixture);
-    await crowdfund.donate({value: 10000, from: otherAccount.address});
+    await crowdfund.connect(otherAccount).donate({ value: ethers.utils.parseEther("0.5") });
 
     return { crowdfund, owner, otherAccount };
   }
@@ -52,7 +52,7 @@ describe("Crowdfund", function () {
 
   describe("Withdrawals", function () {
     describe("Validations", function () {
-      it("Should revert with the right error if called When empty.", async function () {
+      it("Should revert with the right error if called when empty.", async function () {
         const { crowdfund } = await loadFixture(deployCrowdfundFixture);
 
         await expect(crowdfund.withdraw()).to.be.revertedWith(
@@ -63,31 +63,31 @@ describe("Crowdfund", function () {
       it("Should revert with the right error if called by anyone except the owner", async function () {
         const { crowdfund, otherAccount } = await loadFixture(deployCrowdfundFixture);
 
-        // We use lock.connect() to send a transaction from another account
         await expect(crowdfund.connect(otherAccount).withdraw()).to.be.revertedWith(
           "You do not own this contract."
         );
       });
 
       it("Shouldn't fail if the contract has a balance and the owner calls it", async function () {
-        const { crowdfund, owner } = await loadFixture(deployAndAddBalance);
+        const { crowdfund } = await loadFixture(deployAndAddBalance);
+        const balance = await crowdfund.getBalance();
+        // Make sure it has a balance.
+        expect(Number(balance)).to.equal(Number(ethers.utils.parseEther("0.5")));
 
         // Transactions are sent using the first signer by default
-        //await crowdfund.connect(owner).withdraw().sign();
-
-        await expect(crowdfund.connect(owner).withdraw()).not.to.be.reverted;
+        await expect(await crowdfund.withdraw()).not.to.be.reverted;
       });
 
 
       describe("Transfers", function () {
         it("Should transfer the funds to the owner", async function () {
-          const { crowdfund } = await loadFixture(deployCrowdfundFixture);
-          // await time.increaseTo(unlockTime);
+          const { crowdfund, owner } = await loadFixture(deployAndAddBalance);
 
-          // await expect(lock.withdraw()).to.changeEtherBalances(
-          //   [owner, lock],
-          //   [lockedAmount, -lockedAmount]
-          //);
+          await expect(crowdfund.withdraw()).to.changeEtherBalances(
+            [owner, crowdfund],
+            [ethers.utils.parseEther("0.5"), ethers.utils.parseEther("-0.5")]
+          );
+          expect(await crowdfund.getBalance()).to.equal(0);
         });
       });
     });

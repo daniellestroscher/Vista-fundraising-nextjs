@@ -46,5 +46,7 @@ contract Crowdfund {
       }
     }
 
-    receive() external payable {}
+    receive() external payable {
+      addressToContribution[msg.sender] += msg.value;
+    }
 }

@@ -21,7 +21,7 @@ contract CrowdfundMarket is ReentrancyGuard {
         uint goal;
         bool goalReached;
     }
-    mapping(uint => CrowdfundObj) idToCrowdfund;
+    mapping(uint => CrowdfundObj) public idToCrowdfund;
     mapping(address => uint) addressToId;
 
     event CrowdfundCreated(
@@ -30,6 +30,9 @@ contract CrowdfundMarket is ReentrancyGuard {
         address indexed crowdfundContractAddress,
         address owner,
         uint256 goal
+    );
+    event GoalReached(
+      uint goal
     );
 
     function createCrowdfund(
@@ -63,8 +66,13 @@ contract CrowdfundMarket is ReentrancyGuard {
 
     function setGoalReached(address _fundContract) public {
       uint contractId = addressToId[_fundContract];
+      uint goal = idToCrowdfund[contractId].goal;
+
+      require(_fundContract.balance >= goal, "This contract balance does not equal or exceed the goal.");
       idToCrowdfund[contractId].goalReached = true;
       _fundsGoalsMet.increment();
+
+      emit GoalReached(goal);
     }
 
     function getCrowdfund(uint _id) public view returns (CrowdfundObj memory) {
