@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Discover.css";
 
 import axios from "axios";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
-//import CoinbaseWalletSDK, { CoinbaseWalletProvider } from "@coinbase/wallet-sdk";
 import { marketAddress, marketAbi } from "../../config";
 import CrowdfundCard from "../crowdfund-card";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
@@ -12,9 +11,6 @@ import { ethers } from "ethers";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
-
-const RPC_URL = process.env.RPC_URL;
-const CHAIN_ID = process.env.CHAIN_ID;
 
 function Discover() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);

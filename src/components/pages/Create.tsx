@@ -113,9 +113,10 @@ function Create() {
           onChange={(e) =>
             setFormInput({ ...formInput, description: e.target.value })
           }
+          style={{height: "15px"}}
         />
         <input
-          placeholder="financial goal"
+          placeholder="Financial goal in Wei"
           className="input"
           type="number"
           onChange={(e) =>
@@ -124,7 +125,7 @@ function Create() {
         />
         <DropdownMenu setFormInput={setFormInput} formInput={formInput}/>
 
-        <input type="file" name="Asset" className="" onChange={onFileChange} />
+        <input type="file" name="Asset" className="input" onChange={onFileChange} />
         {fileUrl && <img className="" width="350" src={fileUrl} />}
         <button onClick={createCrowdfund} className="submit">
           Create Defi Crowdfund

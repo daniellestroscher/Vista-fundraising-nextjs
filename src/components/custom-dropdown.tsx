@@ -28,7 +28,7 @@ export default function DropdownMenu({ setFormInput, formInput }: props) {
         <option value="" disabled selected hidden>
           Select Category
         </option>
-        <option>Children</option>
+        <option >Children</option>
         <option>Environment & Wildlife</option>
         <option>Poverty</option>
         <option>Research</option>
