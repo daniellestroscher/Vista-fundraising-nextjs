@@ -1,6 +1,19 @@
-.search {
+.search-box {
   display: flex;
-  justify-content: flex-start;
-  align-content: flex-start;
-
+  justify-content: flex-end;
+  align-content: center;
+  padding: 10px
+}
+.search-input {
+  width: 300px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+.search-input:focus {
+ outline: none;
+}
+.search-icon {
+  color: gray;
+  padding: 10px;
 }

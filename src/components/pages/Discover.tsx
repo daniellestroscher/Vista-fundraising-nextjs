@@ -11,6 +11,7 @@ import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import { ethers } from "ethers";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
+import CategoryList from "../categoryList";
 
 const RPC_URL = process.env.RPC_URL;
 const CHAIN_ID = process.env.CHAIN_ID;
@@ -69,6 +70,13 @@ function Discover() {
     <div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <section>
+        <CategoryList category={"Environment & Wildlife"} list={searchableCrowdfunds} />
+        <CategoryList category={"Children"} list={searchableCrowdfunds} />
+        <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
+        <CategoryList category={"Research"} list={searchableCrowdfunds} />
+        <CategoryList category={"Other"} list={searchableCrowdfunds} />
+      </section>
+      {/* <section>
         <div className="crowdfund-list">
           {searchableCrowdfunds.map((crowdfund, i) => {
             return (
@@ -78,7 +86,7 @@ function Discover() {
             );
           })}
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

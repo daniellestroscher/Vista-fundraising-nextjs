@@ -1,4 +1,4 @@
-export const marketAddress = "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8";
+export const marketAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 export const marketAbi = [
   {
     anonymous: false,
@@ -35,6 +35,19 @@ export const marketAbi = [
       },
     ],
     name: "CrowdfundCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "goal",
+        type: "uint256",
+      },
+    ],
+    name: "GoalReached",
     type: "event",
   },
   {
@@ -302,6 +315,50 @@ export const marketAbi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "idToCrowdfund",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "fundId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "metaUrl",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "crowdfundContract",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "goal",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "goalReached",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_fundContract",
         type: "address",
@@ -372,6 +429,19 @@ export const CrowdfundAbi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "goal",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
