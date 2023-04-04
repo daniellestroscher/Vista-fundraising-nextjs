@@ -1,0 +1,39 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  /* max-width: 750px; */
+}
+.header {
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 70vh;
+  width: 100vw;
+  max-width: 1000px;
+  opacity: 0.75;
+  align-self: center;
+}
+
+.page-title {
+  position: absolute;
+  bottom: 10px;
+  width: 300px;
+  border: 1px solid white;
+  border-radius: 50px;
+  padding: 10px;
+  margin: 15px;
+  background-color: black;
+  color: white;
+}
+
+.description {
+  padding: 15px;
+}
+
+.goal-stats-box {
+  border: 2px solid gray;
+  width: 300px;
+  margin: 10px;
+}

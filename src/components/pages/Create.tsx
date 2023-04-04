@@ -1,15 +1,15 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Create.css";
 import DropdownMenu from "../custom-dropdown";
+import "./Create.css";
 
-import Web3Modal from "web3modal";
 //@ts-ignore
 import { create } from "ipfs-http-client";
 import { marketAddress, marketAbi } from "../../config";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
+import { connect } from "../../helperFunctions";
 window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
@@ -82,11 +82,7 @@ function Create() {
   }
 
   async function postCrowdfund(goal: number, url: string) {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const { signer } = await connect();
 
     const marketContract = new ethers.Contract(
       marketAddress,
