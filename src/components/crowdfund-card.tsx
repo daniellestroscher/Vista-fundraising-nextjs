@@ -1,48 +1,58 @@
-import { Crowdfund, CrowdfundWithMeta } from "../types";
+import { CrowdfundWithMeta } from "../types";
 import "./crowdfund-card.css";
 
-import Web3Modal from "web3modal";
-import { ethers } from "ethers";
 import { CrowdfundAbi, marketAbi, marketAddress } from "../config";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  connect,
-  getFundBalance,
-  setCrowdfundGoalReached,
-} from "../helperFunctions";
+import { useContractRead } from "wagmi";
+import { getContract, getProvider, sendTransaction, prepareSendTransaction } from '@wagmi/core'
 
 type props = {
   crowdfund: CrowdfundWithMeta;
 };
 function CrowdfundCard({ crowdfund }: props) {
   const [contribution, setContribution] = useState<number | undefined>(0);
-  const [currentContractBalance, setCurrentContractBalance] = useState<number>(0);
-  const [crowdfundContractInstance, setCrowdfundContractInstance] =
-    useState<ethers.Contract>();
+  const [currentContractBalance, setCurrentContractBalance] =
+    useState<number>(0);
+
+  const { data: amountRaised } = useContractRead({
+    address: crowdfund.crowdfundContract as `0x${string}`,
+    abi: CrowdfundAbi,
+    functionName: "getBalance",
+    watch: true,
+  });
 
   useEffect(() => {
-    updateFundBalance(crowdfund);
-  }, []);
+    setCurrentContractBalance(Number(amountRaised));
+    updateCrowdfundStatus(crowdfund);
+  }, [amountRaised]);
 
-  async function updateFundBalance(_crowdfund: CrowdfundWithMeta) {
-    const { currentContractBalance, crowdfundContractInstance } =
-      await getFundBalance(_crowdfund);
 
-    setCurrentContractBalance(currentContractBalance);
-    setCrowdfundContractInstance(crowdfundContractInstance);
+  async function updateCrowdfundStatus(_crowdfund: CrowdfundWithMeta) {
+    if (
+      currentContractBalance >= _crowdfund.goal &&
+      _crowdfund.goalReached !== true
+    ) {
+      const provider = getProvider()
+      const marketContractInstance = getContract({
+        address: marketAddress,
+        abi: marketAbi,
+        signerOrProvider: provider,
+      })
+      let transactionToSetGoalReached = await marketContractInstance.setGoalReached(
+        _crowdfund.crowdfundContract
+      );
+      let tx = await transactionToSetGoalReached.wait();
+      console.log(tx);
+    }
   }
 
   async function donateToCause() {
-    if (crowdfundContractInstance) {
-      let transaction = await crowdfundContractInstance.donate({
-        value: contribution,
-      });
-      await transaction.wait();
-
-      setContribution(0);
-      updateFundBalance(crowdfund);
-    }
+    const config = await prepareSendTransaction({
+      request: { to: crowdfund.crowdfundContract, value: contribution },
+    });
+    const { hash } = await sendTransaction(config)
+    console.log(hash);
+    setContribution(0);
   }
 
   return (
@@ -99,7 +109,9 @@ function CrowdfundCard({ crowdfund }: props) {
                 </a>
               </div>
               <div className="box">
-                <h5 className="progress">Raised: {currentContractBalance} Wei</h5>
+                <h5 className="progress">
+                  Raised: {currentContractBalance} Wei
+                </h5>
                 <h5 className="progress">Our goal: {crowdfund.goal} Wei</h5>
                 <input
                   type="number"

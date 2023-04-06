@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./ProjectInfo.css";
-import { connect, getFundBalance } from "../../helperFunctions";
 
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import { marketAbi, marketAddress } from "../../config";
+import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
 import { ethers } from "ethers";
 import axios from "axios";
+import { useContract, useContractRead, useProvider, useSigner } from "wagmi";
+import { getContract, getProvider, sendTransaction, prepareSendTransaction } from '@wagmi/core';
 
 export default function ProjectInfo() {
   const param = useParams();
@@ -19,17 +20,32 @@ export default function ProjectInfo() {
     useState<number>();
   const [contribution, setContribution] = useState<number>();
 
+  // const { data: signer } =  useSigner();
+  // const marketContract = useContract({
+  //   address: marketAddress,
+  //   abi: marketAbi,
+  //   signerOrProvider: signer
+  // }) as ethers.Contract;
+
+  const { data: amountRaised } = useContractRead({
+    address: crowdfund?.crowdfundContract as `0x${string}`,
+    abi: CrowdfundAbi,
+    functionName: "getBalance",
+    watch: true,
+  });
+
   useEffect(() => {
     getProject();
-  }, []);
+    setCurrentContractBalance(Number(amountRaised));
+  }, [crowdfund, amountRaised]);
 
   async function getProject() {
-    const { signer } = await connect();
-    const marketContract = new ethers.Contract(
-      marketAddress,
-      marketAbi,
-      signer
-    );
+    const provider = getProvider()
+    const marketContract = getContract({
+      address: marketAddress,
+      abi: marketAbi,
+      signerOrProvider: provider,
+    });
 
     const crowdfundObj = (await marketContract.getCrowdfund(
       fundId
@@ -47,27 +63,24 @@ export default function ProjectInfo() {
       goalReached: crowdfundObj.goalReached,
     } as CrowdfundWithMeta;
 
-    updateFundBalance(crowdfund as CrowdfundWithMeta);
     setCrowdfund(crowdfund);
   }
 
-  async function updateFundBalance(_crowdfund: CrowdfundWithMeta) {
-    const { currentContractBalance, crowdfundContractInstance } =
-      await getFundBalance(_crowdfund);
+  // async function updateFundBalance(_crowdfund: CrowdfundWithMeta) {
+  //   const { currentContractBalance, crowdfundContractInstance } =
+  //     await getFundBalance(_crowdfund, signer as ethers.Signer);
 
-    setCurrentContractBalance(currentContractBalance);
-    setCrowdfundContractInstance(crowdfundContractInstance);
-  }
+  //   setCurrentContractBalance(currentContractBalance);
+  //   setCrowdfundContractInstance(crowdfundContractInstance);
+  // }
 
   async function donateToCause() {
-    if (crowdfund && crowdfundContractInstance) {
-      let transaction = await crowdfundContractInstance.donate({
-        value: contribution,
+    if (crowdfund) {
+      const config = await prepareSendTransaction({
+        request: { to: crowdfund.crowdfundContract, value: contribution },
       });
-      let tx = await transaction.wait();
-      console.log(tx);
-
-      updateFundBalance(crowdfund);
+      const { hash } = await sendTransaction(config)
+      console.log(hash);
       setContribution(0);
     }
   }

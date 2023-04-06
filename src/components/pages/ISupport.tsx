@@ -5,28 +5,29 @@ import Web3Modal from "web3modal";
 import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
+import { useContract, useProvider, useSigner } from "wagmi";
 
 function ISupport() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+  const provider = useProvider();
+  const { data: signer } = useSigner();
+  const marketContract = useContract({
+    address: marketAddress,
+    abi: marketAbi,
+    signerOrProvider: signer
+  }) as ethers.Contract;
 
   useEffect(() => {
     loadCrowdfunds();
   }, []);
 
   async function loadCrowdfunds() {
-    if (!window.ethereum) alert("no eth object found");
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
 
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
-    const marketContract = new ethers.Contract(
-      marketAddress,
-      marketAbi,
-      signer
-    );
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
 
     const allCrowdfunds =
       (await marketContract.getActiveFundraisers()) as Crowdfund[];
@@ -50,7 +51,7 @@ function ISupport() {
     if (crowdfundList.length) {
       let filteredList = (await filterListISupport(
         crowdfundList,
-        signer
+        signer as ethers.Signer
       )) as CrowdfundWithMeta[];
 
       setCrowdfundArr(filteredList);
@@ -60,7 +61,7 @@ function ISupport() {
 
   async function filterListISupport(
     crowdfundList: CrowdfundWithMeta[],
-    signer: ethers.providers.JsonRpcSigner
+    signer: ethers.Signer
   ) {
     for (let i = 0; i < crowdfundList.length; i++) {
       //filter out all except ones that signer has contributed to.

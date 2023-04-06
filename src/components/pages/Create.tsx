@@ -9,7 +9,7 @@ import { marketAddress, marketAbi } from "../../config";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
-import { connect } from "../../helperFunctions";
+import { useContract, useProvider, useSigner } from "wagmi";
 window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
@@ -40,6 +40,13 @@ function Create() {
     category: "",
   });
   let navigate = useNavigate();
+  const { data: signer } = useSigner();
+
+  const marketContract = useContract({
+    address: marketAddress,
+    abi: marketAbi,
+    signerOrProvider: signer
+  }) as ethers.Contract;
 
   async function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files && e.target.files[0];
@@ -82,13 +89,6 @@ function Create() {
   }
 
   async function postCrowdfund(goal: number, url: string) {
-    const { signer } = await connect();
-
-    const marketContract = new ethers.Contract(
-      marketAddress,
-      marketAbi,
-      signer
-    );
 
     let transaction = await marketContract.createCrowdfund(goal, url);
     await transaction.wait();

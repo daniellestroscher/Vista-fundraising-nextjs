@@ -2,41 +2,39 @@ import { useEffect, useState } from "react";
 import "./Discover.css";
 
 import axios from "axios";
-import Web3Modal from "web3modal";
-import Web3 from "web3";
 import { marketAddress, marketAbi } from "../../config";
-import CrowdfundCard from "../crowdfund-card";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import { ethers } from "ethers";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
+import { useAccount, useContract, useContractRead, useSigner } from "wagmi";
+import { readContract } from "@wagmi/core";
 
 function Discover() {
-  const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+  const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  //const { data: signer } = useSigner();
+  // const marketContract = useContract({
+  //   address: marketAddress,
+  //   abi: marketAbi,
+  //   signerOrProvider: signer
+  // }) as ethers.Contract;
 
   useEffect(() => {
-    loadCrowdfunds();
+      loadCrowdfunds();
   }, []);
 
   async function loadCrowdfunds() {
-    if (!window.ethereum) alert("no eth object found");
-    const provider = ethers.getDefaultProvider("http://localhost:8545");
-    console.log(provider);
-
-    const marketContract = new ethers.Contract(
-      marketAddress,
-      marketAbi,
-      provider
-    );
-    console.log(marketContract);
-    const allCrowdfunds =
-      (await marketContract.getActiveFundraisers()) as Crowdfund[];
+    const allActiveFundraisers = await readContract({
+      address: marketAddress,
+      abi: marketAbi,
+      functionName: "getActiveFundraisers",
+    }) as Crowdfund[];
 
     const crowdfundList = (await Promise.all(
-      allCrowdfunds.map(async (crowdfund: Crowdfund) => {
+      allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
         return {
           fundId: Number(crowdfund.fundId),
@@ -51,12 +49,11 @@ function Discover() {
         };
       })
     )) as CrowdfundWithMeta[];
+
     setCrowdfundArr(crowdfundList);
     setLoadingState("loaded");
-    console.log(crowdfundList, "list");
   }
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
-
 
   if (loadingState === "loaded" && !crowdfundArr.length) {
     return <h2>No Crowdfunds in this marketplace.</h2>;
@@ -66,7 +63,10 @@ function Discover() {
     <div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <section>
-        <CategoryList category={"Environment & Wildlife"} list={searchableCrowdfunds} />
+        <CategoryList
+          category={"Environment & Wildlife"}
+          list={searchableCrowdfunds}
+        />
         <CategoryList category={"Children"} list={searchableCrowdfunds} />
         <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
         <CategoryList category={"Research"} list={searchableCrowdfunds} />

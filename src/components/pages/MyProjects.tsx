@@ -5,32 +5,28 @@ import { marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
 import Web3Modal from "web3modal";
+import { useContract, useProvider, useSigner } from "wagmi";
 
 function MyProjects() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+  const { data: signer } = useSigner();
+  const marketContract = useContract({
+    address: marketAddress,
+    abi: marketAbi,
+    signerOrProvider: signer
+  }) as ethers.Contract;
 
   useEffect(() => {
     loadCrowdfunds();
   }, []);
 
   async function loadCrowdfunds() {
-    if (!window.ethereum) alert("no eth object found");
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
-    const marketContract = new ethers.Contract(
-      marketAddress,
-      marketAbi,
-      signer
-    );
 
     const allCrowdfunds =
       (await marketContract.getMyFundraisers()) as Crowdfund[];
     console.log(allCrowdfunds, "funds");
+    
     const crowdfundList = (await Promise.all(
       allCrowdfunds.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
@@ -49,7 +45,6 @@ function MyProjects() {
     )) as CrowdfundWithMeta[];
     setCrowdfundArr(crowdfundList);
     setLoadingState("loaded");
-    console.log(crowdfundList, "list");
   }
 
   if (loadingState === "loaded" && !crowdfundArr.length) {
