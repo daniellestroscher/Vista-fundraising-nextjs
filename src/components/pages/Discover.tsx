@@ -15,23 +15,19 @@ function Discover() {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  //const { data: signer } = useSigner();
-  // const marketContract = useContract({
-  //   address: marketAddress,
-  //   abi: marketAbi,
-  //   signerOrProvider: signer
-  // }) as ethers.Contract;
-
+  const { address, isConnected } = useAccount();
   useEffect(() => {
+    if (isConnected) {
       loadCrowdfunds();
+    }
   }, []);
 
   async function loadCrowdfunds() {
-    const allActiveFundraisers = await readContract({
+    const allActiveFundraisers = (await readContract({
       address: marketAddress,
       abi: marketAbi,
       functionName: "getActiveFundraisers",
-    }) as Crowdfund[];
+    })) as Crowdfund[];
 
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
@@ -60,30 +56,26 @@ function Discover() {
   }
 
   return (
-    <div>
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <section>
-        <CategoryList
-          category={"Environment & Wildlife"}
-          list={searchableCrowdfunds}
-        />
-        <CategoryList category={"Children"} list={searchableCrowdfunds} />
-        <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
-        <CategoryList category={"Research"} list={searchableCrowdfunds} />
-        <CategoryList category={"Other"} list={searchableCrowdfunds} />
-      </section>
-      {/* <section>
-        <div className="crowdfund-list">
-          {searchableCrowdfunds.map((crowdfund, i) => {
-            return (
-              <div key={i}>
-                <CrowdfundCard crowdfund={crowdfund} />
-              </div>
-            );
-          })}
+    <>
+      {crowdfundArr.length !== 0 && (
+        <div>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+          <section>
+            <CategoryList
+              category={"Environment & Wildlife"}
+              list={searchableCrowdfunds}
+            />
+            <CategoryList category={"Children"} list={searchableCrowdfunds} />
+            <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
+            <CategoryList category={"Research"} list={searchableCrowdfunds} />
+            <CategoryList category={"Other"} list={searchableCrowdfunds} />
+          </section>
         </div>
-      </section> */}
-    </div>
+      )}
+    </>
   );
 }
 

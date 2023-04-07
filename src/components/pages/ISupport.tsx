@@ -5,29 +5,28 @@ import Web3Modal from "web3modal";
 import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
-import { useContract, useProvider, useSigner } from "wagmi";
+import { useAccount, useContract, useProvider, useSigner } from "wagmi";
+import { getContract, getProvider, getAccount } from "@wagmi/core";
 
 function ISupport() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
-  const provider = useProvider();
   const { data: signer } = useSigner();
-  const marketContract = useContract({
-    address: marketAddress,
-    abi: marketAbi,
-    signerOrProvider: signer
-  }) as ethers.Contract;
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    loadCrowdfunds();
+    if (isConnected) {
+      loadCrowdfunds();
+    }
   }, []);
 
   async function loadCrowdfunds() {
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-
-    // const provider = new ethers.providers.Web3Provider(connection);
-    // const signer = provider.getSigner();
+    const provider = getProvider();
+    const marketContract = getContract({
+      address: marketAddress,
+      abi: marketAbi,
+      signerOrProvider: provider,
+    });
 
     const allCrowdfunds =
       (await marketContract.getActiveFundraisers()) as Crowdfund[];
@@ -50,8 +49,7 @@ function ISupport() {
     )) as CrowdfundWithMeta[];
     if (crowdfundList.length) {
       let filteredList = (await filterListISupport(
-        crowdfundList,
-        signer as ethers.Signer
+        crowdfundList
       )) as CrowdfundWithMeta[];
 
       setCrowdfundArr(filteredList);
@@ -59,18 +57,17 @@ function ISupport() {
     }
   }
 
-  async function filterListISupport(
-    crowdfundList: CrowdfundWithMeta[],
-    signer: ethers.Signer
-  ) {
+  async function filterListISupport(crowdfundList: CrowdfundWithMeta[]) {
     for (let i = 0; i < crowdfundList.length; i++) {
       //filter out all except ones that signer has contributed to.
-      let crowdfundContractInstance = new ethers.Contract(
-        crowdfundList[i].crowdfundContract,
-        CrowdfundAbi,
-        signer
-      );
-      let signerAddress = await signer.getAddress();
+      const provider = getProvider();
+      const crowdfundContractInstance = getContract({
+        address: crowdfundList[i].crowdfundContract,
+        abi: CrowdfundAbi,
+        signerOrProvider: provider,
+      });
+      const account = getAccount();
+      let signerAddress = account.address;
       let donatedToContract =
         await crowdfundContractInstance.checkIfContributor(signerAddress);
       let donated = [] as CrowdfundWithMeta[];
@@ -85,18 +82,22 @@ function ISupport() {
     return <h2>You don't support any active projects.</h2>;
   }
   return (
-    <div>
-      <h4>You support these awesome projects. see how they're doing!</h4>
-      <div className="crowdfund-list">
-        {crowdfundArr.map((crowdfund, i) => {
-          return (
-            <div key={i}>
-              <CrowdfundCard crowdfund={crowdfund} />
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <>
+      {crowdfundArr.length !== 0 && (
+        <div>
+          <h4>You support these awesome projects. see how they're doing!</h4>
+          <div className="crowdfund-list">
+            {crowdfundArr.map((crowdfund, i) => {
+              return (
+                <div key={i}>
+                  <CrowdfundCard crowdfund={crowdfund} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

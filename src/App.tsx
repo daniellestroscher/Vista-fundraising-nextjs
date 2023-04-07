@@ -33,9 +33,9 @@ const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
 function App() {
   const { provider } = configureChains(chains, [
     w3mProvider({ projectId }),
-    // infuraProvider({ apiKey: process.env.REACT_APP_INFURA_SECRET as string }),
+    publicProvider({priority: 1}),
+    infuraProvider({ apiKey: process.env.REACT_APP_INFURA_SECRET as string, priority: 1 }),
     jsonRpcProvider({ rpc: () => ({ http: "https://rpc.ankr.com/gnosis" }) }), //<<<< New RPC Provider
-    publicProvider(),
   ]);
   const wagmiClient = createClient({
     autoConnect: true,
@@ -54,7 +54,7 @@ function App() {
               <div className="title">
                 <h2 className="name">Vista Fundraising,</h2>
                 <h4>support projects that make a difference.</h4>
-                <section>
+                <section style={{position: 'absolute', right: "10px", top: '10px'}}>
                   {chain && <div>Connected to {chain.name}</div>}
                   <Web3Button />
                 </section>

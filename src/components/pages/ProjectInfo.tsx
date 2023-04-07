@@ -14,10 +14,8 @@ export default function ProjectInfo() {
   const fundId = param.id;
 
   const [crowdfund, setCrowdfund] = useState<CrowdfundWithMeta>();
-  const [crowdfundContractInstance, setCrowdfundContractInstance] =
-    useState<ethers.Contract>();
   const [currentContractBalance, setCurrentContractBalance] =
-    useState<number>();
+    useState<number>(0);
   const [contribution, setContribution] = useState<number>();
 
   // const { data: signer } =  useSigner();
