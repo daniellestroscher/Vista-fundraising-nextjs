@@ -3,8 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import LandingPage from "./components/LandingPage";
 import Discover from "./components/pages/Discover";
 import Create from "./components/pages/Create";
 import MyProjects from "./components/pages/MyProjects";
@@ -13,23 +18,15 @@ import ProjectInfo from "./components/pages/ProjectInfo";
 import Menu from "./components/Menu";
 
 import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { infuraProvider } from "wagmi/providers/infura";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
-  darkTheme,
   getDefaultWallets,
   lightTheme,
-  midnightTheme,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
-//import { Web3Button, Web3Modal } from "@web3modal/react";
+import { w3mProvider } from "@web3modal/ethereum";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   configureChains,
@@ -41,7 +38,6 @@ import {
   WagmiConfig,
 } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli, localhost } from "wagmi/chains";
-import SearchBar from "./components/SearchBar";
 
 const chainList = [goerli, polygon, localhost, arbitrum, mainnet];
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
@@ -64,9 +60,8 @@ function App() {
     connectors, //connectors: w3mConnectors({ projectId, version: 1, chains }),
     provider,
   });
-  const { isConnected } = useAccount();
   const [menuState, setMenuState] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { isConnected } = useAccount();
 
   return (
     <>
@@ -101,16 +96,16 @@ function App() {
                       <FontAwesomeIcon
                         icon={faBars}
                         onClick={(e) => setMenuState(!menuState)}
-                        //onMouseEnter={(e) => setMenuState(!menuState)}
                         className="menu-bars"
                       />
                     )}
                   </section>
                 </div>
               </header>
-              {menuState && (
-                <Menu setMenuState={setMenuState} menuState={menuState} />
-              )}
+              <div>{!isConnected && <LandingPage />}</div>
+
+              <Menu setMenuState={setMenuState} menuState={menuState} />
+
               <Router>
                 <Routes>
                   <Route path="/" element={<Discover />} />

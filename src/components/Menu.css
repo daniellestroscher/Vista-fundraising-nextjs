@@ -1,15 +1,34 @@
 .nav {
+  width: 0px;
+  height: 100vh;
+  /* overflow: hidden; */
+
   display: flex;
   position: fixed;
   right: 0px;
   top: 0px;
+
   background-color: #f2cefc;
   flex-direction: column;
   gap: 25px;
   z-index: 2;
-  padding: 30px;
-  height: 100vh;
+
+  /* transition: width 1s ease;
+  -moz-transition: width 1s ease;
+  -ms-transition: width 1s ease;
+  -o-transition: width 1s ease;
+  -webkit-transition: width 1s ease; */
+}
+
+.slide {
   width: 50vw;
+  padding: 30px;
+
+  transition: width 1s ease;
+  -moz-transition: width 1s ease;
+  -ms-transition: width 1s ease;
+  -o-transition: width 1s ease;
+  -webkit-transition: width 1s ease;
 }
 .close-icon {
   height: 20px;

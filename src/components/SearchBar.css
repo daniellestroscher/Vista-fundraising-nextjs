@@ -3,6 +3,7 @@
   justify-content: flex-end;
   align-content: center;
   padding: 10px;
+  z-index: 1;
 }
 .search-input {
   width: 300px;

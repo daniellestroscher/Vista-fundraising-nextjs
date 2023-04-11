@@ -4,25 +4,20 @@ import "./Discover.css";
 import axios from "axios";
 import { marketAddress, marketAbi } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import { ethers } from "ethers";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
 import { useAccount, useContract, useContractRead, useSigner } from "wagmi";
 import { readContract } from "@wagmi/core";
-type props = {
-  //searchQuery: string;
-};
-function Discover({}: props) {
+
+function Discover() {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   useEffect(() => {
-    if (isConnected) {
       loadCrowdfunds();
-    }
-  }, []);
+  }, [isConnected]);
 
   async function loadCrowdfunds() {
     const allActiveFundraisers = (await readContract({
