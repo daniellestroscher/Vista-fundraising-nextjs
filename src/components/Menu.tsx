@@ -10,7 +10,7 @@ type props = {
 };
 export default function Menu({ setMenuState, menuState }: props) {
   return (
-    <nav className={menuState ? "nav slide" : "nav"}>
+    <nav className={!menuState ? "nav slide" : "nav"}>
       <FontAwesomeIcon
         icon={faSlash}
         onClick={() => {
@@ -18,16 +18,28 @@ export default function Menu({ setMenuState, menuState }: props) {
         }}
         className="close-icon"
       />
-      <a className="nav-item" href="/">
+      <a
+        className={!menuState ? "nav-item hide-overflow" : "nav-item"}
+        href="/"
+      >
         <h3>Find places to give.</h3>
       </a>
-      <a className="nav-item" href="/create">
+      <a
+        className={!menuState ? "nav-item hide-overflow" : "nav-item"}
+        href="/create"
+      >
         <h3>Create a new funding project.</h3>
       </a>
-      <a className="nav-item" href="/my-projects">
+      <a
+        className={!menuState ? "nav-item hide-overflow" : "nav-item"}
+        href="/my-projects"
+      >
         <h3>My funding projects.</h3>
       </a>
-      <a className="nav-item" href="/i-support">
+      <a
+        className={!menuState ? "nav-item hide-overflow" : "nav-item"}
+        href="/i-support"
+      >
         <h3>Funding project's i support.</h3>
       </a>
     </nav>
