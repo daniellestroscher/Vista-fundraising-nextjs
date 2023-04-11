@@ -10,8 +10,10 @@ import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
 import { useAccount, useContract, useContractRead, useSigner } from "wagmi";
 import { readContract } from "@wagmi/core";
-
-function Discover() {
+type props = {
+  //searchQuery: string;
+};
+function Discover({}: props) {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,10 +61,12 @@ function Discover() {
     <>
       {crowdfundArr.length !== 0 && (
         <div>
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
+          <div style={{ position: "fixed", top : "55px", right: "35px"}}>
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          </div>
           <section>
             <CategoryList
               category={"Environment & Wildlife"}

@@ -6,27 +6,39 @@ import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
 import Web3Modal from "web3modal";
 import { useAccount, useContract, useProvider, useSigner } from "wagmi";
-import { getContract, getProvider } from "@wagmi/core";
+import { getContract, getProvider, readContract } from "@wagmi/core";
 
 function MyProjects() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { data: signer } = useSigner();
+  console.log(signer);
   const { address, isConnected } = useAccount();
+  const marketContract = useContract({
+    address: marketAddress,
+    abi: marketAbi,
+    signerOrProvider: signer,
+  }) as ethers.Contract;
 
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
     }
-  }, []);
+  }, [isConnected, marketContract]);
 
   async function loadCrowdfunds() {
-    const provider = getProvider();
-    const marketContract = getContract({
-      address: marketAddress,
-      abi: marketAbi,
-      signerOrProvider: provider,
-    });
+    // const allCrowdfunds = (await readContract({
+    //   address: marketAddress,
+    //   abi: marketAbi,
+    //   functionName: "getMyFundraisers",
+    // })) as Crowdfund[];
+
+    // const marketContract = getContract({
+    //   address: marketAddress,
+    //   abi: marketAbi,
+    //   signerOrProvider: signer as ethers.Signer,
+    // });
+    console.log(marketContract, "contact");
 
     const allCrowdfunds =
       (await marketContract.getMyFundraisers()) as Crowdfund[];

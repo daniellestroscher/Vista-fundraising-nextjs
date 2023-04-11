@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import "./categoryList.css"
 import { CrowdfundWithMeta } from "../types";
 import CrowdfundCard from "./crowdfund-card";
 
@@ -15,12 +15,7 @@ export default function CategoryList({ category, list }: props) {
     <>
       {filteredList.length !== 0 && (
         <h4
-          style={{
-            display: "flex",
-            justifySelf: "flex-start",
-            paddingLeft: "15px",
-            marginBlockEnd: "10px",
-          }}
+          className="category-title"
         >
           {category}
         </h4>
@@ -38,7 +33,7 @@ export default function CategoryList({ category, list }: props) {
           filteredList.map((item, i) => {
             return (
               <div key={i}>
-                <CrowdfundCard crowdfund={item}/>
+                <CrowdfundCard crowdfund={item} />
               </div>
             );
           })}

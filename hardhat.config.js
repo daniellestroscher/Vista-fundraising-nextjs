@@ -7,5 +7,8 @@ module.exports = {
     hardhat: {
       chainId: 1337,
     },
+    goerli: {
+      chainId:5
+    }
   },
 };

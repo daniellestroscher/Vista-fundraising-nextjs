@@ -9,7 +9,7 @@ import { marketAddress, marketAbi } from "../../config";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
-import { useContract, useProvider, useSigner } from "wagmi";
+import { useContract, useProvider, useSigner, useAccount } from "wagmi";
 window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
@@ -40,12 +40,15 @@ function Create() {
     category: "",
   });
   let navigate = useNavigate();
+  const { address, isConnected } = useAccount();
+  console.log(address, "address");
   const { data: signer } = useSigner();
+  console.log(signer, "signer");
 
   const marketContract = useContract({
     address: marketAddress,
     abi: marketAbi,
-    signerOrProvider: signer
+    signerOrProvider: signer,
   }) as ethers.Contract;
 
   async function onFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -89,45 +92,55 @@ function Create() {
   }
 
   async function postCrowdfund(goal: number, url: string) {
-
     let transaction = await marketContract.createCrowdfund(goal, url);
     await transaction.wait();
     navigate("/");
   }
 
   return (
-    <div className="page">
-      <div className="form">
-        <input
-          placeholder="Name"
-          className="input"
-          onChange={(e) => setFormInput({ ...formInput, name: e.target.value })}
-        />
-        <textarea
-          placeholder="Description"
-          className="input"
-          onChange={(e) =>
-            setFormInput({ ...formInput, description: e.target.value })
-          }
-          style={{height: "15px"}}
-        />
-        <input
-          placeholder="Financial goal in Wei"
-          className="input"
-          type="number"
-          onChange={(e) =>
-            setFormInput({ ...formInput, goal: Number(e.target.value) })
-          }
-        />
-        <DropdownMenu setFormInput={setFormInput} formInput={formInput}/>
+    <>
+      {isConnected && (
+        <div className="page">
+          <div className="form">
+            <input
+              placeholder="Name"
+              className="input"
+              onChange={(e) =>
+                setFormInput({ ...formInput, name: e.target.value })
+              }
+            />
+            <textarea
+              placeholder="Description"
+              className="input"
+              onChange={(e) =>
+                setFormInput({ ...formInput, description: e.target.value })
+              }
+              style={{ height: "15px" }}
+            />
+            <input
+              placeholder="Financial goal in Wei"
+              className="input"
+              type="number"
+              onChange={(e) =>
+                setFormInput({ ...formInput, goal: Number(e.target.value) })
+              }
+            />
+            <DropdownMenu setFormInput={setFormInput} formInput={formInput} />
 
-        <input type="file" name="Asset" className="input" onChange={onFileChange} />
-        {fileUrl && <img className="" width="350" src={fileUrl} />}
-        <button onClick={createCrowdfund} className="submit">
-          Create Defi Crowdfund
-        </button>
-      </div>
-    </div>
+            <input
+              type="file"
+              name="Asset"
+              className="input"
+              onChange={onFileChange}
+            />
+            {fileUrl && <img className="" width="350" src={fileUrl} />}
+            <button onClick={createCrowdfund} className="submit">
+              Create Defi Crowdfund
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
