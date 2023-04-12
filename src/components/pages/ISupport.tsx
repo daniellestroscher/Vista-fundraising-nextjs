@@ -1,24 +1,23 @@
-import react, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import "./ISupport.css";
+
+import CrowdfundCard from "../crowdfund-card";
 import axios from "axios";
-import { ethers } from "ethers";
-import Web3Modal from "web3modal";
 import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import CrowdfundCard from "../crowdfund-card";
 import { useAccount, useContract, useProvider, useSigner } from "wagmi";
 import { getContract, getProvider, getAccount } from "@wagmi/core";
 
 function ISupport() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
-  const { data: signer } = useSigner();
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
     }
-  }, []);
+  }, [isConnected, address]);
 
   async function loadCrowdfunds() {
     const provider = getProvider();
@@ -30,7 +29,7 @@ function ISupport() {
 
     const allCrowdfunds =
       (await marketContract.getActiveFundraisers()) as Crowdfund[];
-
+    console.log(allCrowdfunds, 'all funds')
     let crowdfundList = (await Promise.all(
       allCrowdfunds.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
@@ -47,14 +46,16 @@ function ISupport() {
         };
       })
     )) as CrowdfundWithMeta[];
+
     if (crowdfundList.length) {
       let filteredList = (await filterListISupport(
         crowdfundList
       )) as CrowdfundWithMeta[];
 
       setCrowdfundArr(filteredList);
-      setLoadingState("loaded");
+      //setLoadingState("loaded");
     }
+    setLoadingState("loaded");
   }
 
   async function filterListISupport(crowdfundList: CrowdfundWithMeta[]) {
@@ -77,15 +78,15 @@ function ISupport() {
       return donated;
     }
   }
-
-  if (loadingState === "loaded" && !crowdfundArr.length) {
-    return <h2>You don't support any active projects.</h2>;
+  console.log(loadingState)
+  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
+    return <div className="page"><p className="page-heading">You don't support any active projects.</p></div>;
   }
   return (
     <>
       {crowdfundArr.length !== 0 && (
-        <div>
-          <h4>You support these awesome projects. see how they're doing!</h4>
+        <div className="page">
+          <p className="page-heading">You support these awesome projects. see how they're doing!</p>
           <div className="crowdfund-list">
             {crowdfundArr.map((crowdfund, i) => {
               return (

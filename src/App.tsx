@@ -63,6 +63,10 @@ function App() {
   const [menuState, setMenuState] = useState(false);
   const { isConnected } = useAccount();
 
+  useEffect(() => {
+
+  }, [isConnected]);
+
   return (
     <>
       <WagmiConfig client={wagmiClient}>

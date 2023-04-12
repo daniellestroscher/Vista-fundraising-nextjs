@@ -1,6 +1,6 @@
-import axios from "axios";
-import { ethers } from "ethers";
 import react, { useEffect, useState } from "react";
+import "./MyProjects.css";
+import axios from "axios";
 import { marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
@@ -11,41 +11,24 @@ import { getContract, getProvider, readContract } from "@wagmi/core";
 function MyProjects() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
-  const { data: signer } = useSigner();
-  console.log(signer);
   const { address, isConnected } = useAccount();
-  const marketContract = useContract({
-    address: marketAddress,
-    abi: marketAbi,
-    signerOrProvider: signer,
-  }) as ethers.Contract;
 
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
     }
-  }, [isConnected, marketContract]);
+  }, [isConnected, address]);
 
   async function loadCrowdfunds() {
-    // const allCrowdfunds = (await readContract({
-    //   address: marketAddress,
-    //   abi: marketAbi,
-    //   functionName: "getMyFundraisers",
-    // })) as Crowdfund[];
-
-    // const marketContract = getContract({
-    //   address: marketAddress,
-    //   abi: marketAbi,
-    //   signerOrProvider: signer as ethers.Signer,
-    // });
-    console.log(marketContract, "contact");
-
-    const allCrowdfunds =
-      (await marketContract.getMyFundraisers()) as Crowdfund[];
-    console.log(allCrowdfunds, "funds");
+    const allMyCrowdfunds = (await readContract({
+      address: marketAddress,
+      abi: marketAbi,
+      functionName: "getMyFundraisers",
+      overrides: { from: address },
+    })) as Crowdfund[];
 
     const crowdfundList = (await Promise.all(
-      allCrowdfunds.map(async (crowdfund: Crowdfund) => {
+      allMyCrowdfunds.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
         return {
           fundId: Number(crowdfund.fundId),
@@ -64,15 +47,17 @@ function MyProjects() {
     setLoadingState("loaded");
   }
 
-  if (loadingState === "loaded" && !crowdfundArr.length) {
-    return <h2>You haven't created any crowdfunds.</h2>;
+  console.log(crowdfundArr, 'my crowdfunds');
+
+  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
+    return <div className="page"><p className="page-heading">You haven't created any crowdfunds.</p></div>;
   }
 
   return (
     <>
       {crowdfundArr.length !== 0 && (
-        <div>
-          <h4>You created these awesome projects. see how they're doing!</h4>
+        <div className="page">
+          <p className="page-heading">You created these awesome projects. see how they're doing!</p>
           <div className="crowdfund-list">
             {crowdfundArr.map((crowdfund, i) => {
               return (

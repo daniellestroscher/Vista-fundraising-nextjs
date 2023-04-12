@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+const infura_api = process.env.REACT_APP_INFURA_API;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -8,7 +9,8 @@ module.exports = {
       chainId: 1337,
     },
     goerli: {
-      chainId:5
+      url: `https://goerli.infura.io/v3/${infura_api}`,
+      chainId:5,
     }
   },
 };

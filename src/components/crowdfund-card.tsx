@@ -5,10 +5,11 @@ import { CrowdfundAbi, marketAbi, marketAddress } from "../config";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 import {
-  getContract,
-  getProvider,
   sendTransaction,
   prepareSendTransaction,
+  writeContract,
+  prepareWriteContract,
+  waitForTransaction
 } from "@wagmi/core";
 
 type props = {
@@ -25,53 +26,55 @@ function CrowdfundCard({ crowdfund }: props) {
     functionName: "getBalance",
     watch: true,
   });
+  const { data: goalReached } = useContractRead({
+    address: crowdfund.crowdfundContract as `0x${string}`,
+    abi: CrowdfundAbi,
+    functionName: "goalReached",
+    watch: true,
+  });
 
   useEffect(() => {
     setCurrentContractBalance(Number(amountRaised));
-    updateCrowdfundStatus(crowdfund);
-  }, [amountRaised]);
+    console.log(goalReached, 'goal reached?');
 
-  async function updateCrowdfundStatus(_crowdfund: CrowdfundWithMeta) {
-    if (
-      currentContractBalance >= _crowdfund.goal &&
-      _crowdfund.goalReached !== true
-    ) {
-      const provider = getProvider();
-      const marketContractInstance = getContract({
-        address: marketAddress,
-        abi: marketAbi,
-        signerOrProvider: provider,
-      });
-      let transactionToSetGoalReached =
-        await marketContractInstance.setGoalReached(
-          _crowdfund.crowdfundContract
-        );
-      let tx = await transactionToSetGoalReached.wait();
-      console.log(tx);
-    }
-  }
+  }, [amountRaised, goalReached]);
 
   async function donateToCause() {
+    //check balance
     const config = await prepareSendTransaction({
       request: { to: crowdfund.crowdfundContract, value: contribution },
     });
     const { hash } = await sendTransaction(config);
-    console.log(hash);
-    setContribution(0);
+    console.log(hash, "transaction hash");
   }
 
   return (
     <>
-      {!crowdfund.goalReached ? (
+      {
         <div className="container">
-          <div className="crowdfund-item">
+          <div
+            className={
+              !goalReached
+                ? "crowdfund-item"
+                : "crowdfund-item-complete"
+            }
+          >
             <div className="image-box">
               <img src={crowdfund.image} width={350} className="image" />
             </div>
             <section className="info">
               <a href={`/projects/${crowdfund.fundId}`}>
                 <div className="card-header">
-                  <h3 className="fund-name">{crowdfund.name}</h3>
+                  <h3
+                    className="fund-name"
+                    style={{
+                      color: goalReached
+                        ? "rgb(9, 103, 18)"
+                        : "inherit",
+                    }}
+                  >
+                    {crowdfund.name}
+                  </h3>
                   {(crowdfund.category === "Children" && (
                     <img src="charity.png" width={75} className="category" />
                   )) ||
@@ -97,10 +100,16 @@ function CrowdfundCard({ crowdfund }: props) {
                 <p className="desc">{crowdfund.description}</p>
                 <div className="status">
                   <p className="progress">
-                    <strong>{crowdfund.goal - currentContractBalance}</strong>{" "}
+                    <strong>
+                      {String(crowdfund.goal - currentContractBalance)}
+                    </strong>{" "}
                     Wei needed to reach our goal.
                   </p>
-                  <div>
+                  <div
+                    style={{
+                      visibility: goalReached ? "hidden" : "visible",
+                    }}
+                  >
                     <input
                       className="donate-box"
                       type="number"
@@ -115,21 +124,7 @@ function CrowdfundCard({ crowdfund }: props) {
             </section>
           </div>
         </div>
-      ) : (
-        <div className="crowdfund-item-completed">
-          <img src={crowdfund.image} width={350} className="image" />
-          <section className="info">
-            <div className="box">
-              <h3 className="fund-name">{crowdfund.name}</h3>
-              <p className="desc">{crowdfund.description}</p>
-            </div>
-            <div className="box">
-              <h5 className="progress">Raised: {currentContractBalance} Wei</h5>
-              <h5 className="progress">Our goal: {crowdfund.goal} Wei</h5>
-            </div>
-          </section>
-        </div>
-      )}
+      }
     </>
   );
 }

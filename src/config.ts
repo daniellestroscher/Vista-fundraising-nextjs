@@ -1,4 +1,4 @@
-export const marketAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+export const marketAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
 export const marketAbi = [
   {
     anonymous: false,
@@ -35,19 +35,6 @@ export const marketAbi = [
       },
     ],
     name: "CrowdfundCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "goal",
-        type: "uint256",
-      },
-    ],
-    name: "GoalReached",
     type: "event",
   },
   {
@@ -112,11 +99,6 @@ export const marketAbi = [
             name: "goal",
             type: "uint256",
           },
-          {
-            internalType: "bool",
-            name: "goalReached",
-            type: "bool",
-          },
         ],
         internalType: "struct CrowdfundMarket.CrowdfundObj[]",
         name: "",
@@ -163,11 +145,6 @@ export const marketAbi = [
             name: "goal",
             type: "uint256",
           },
-          {
-            internalType: "bool",
-            name: "goalReached",
-            type: "bool",
-          },
         ],
         internalType: "struct CrowdfundMarket.CrowdfundObj",
         name: "",
@@ -207,11 +184,6 @@ export const marketAbi = [
             internalType: "uint256",
             name: "goal",
             type: "uint256",
-          },
-          {
-            internalType: "bool",
-            name: "goalReached",
-            type: "bool",
           },
         ],
         internalType: "struct CrowdfundMarket.CrowdfundObj[]",
@@ -253,11 +225,6 @@ export const marketAbi = [
             name: "goal",
             type: "uint256",
           },
-          {
-            internalType: "bool",
-            name: "goalReached",
-            type: "bool",
-          },
         ],
         internalType: "struct CrowdfundMarket.CrowdfundObj[]",
         name: "",
@@ -297,11 +264,6 @@ export const marketAbi = [
             internalType: "uint256",
             name: "goal",
             type: "uint256",
-          },
-          {
-            internalType: "bool",
-            name: "goalReached",
-            type: "bool",
           },
         ],
         internalType: "struct CrowdfundMarket.CrowdfundObj[]",
@@ -347,26 +309,8 @@ export const marketAbi = [
         name: "goal",
         type: "uint256",
       },
-      {
-        internalType: "bool",
-        name: "goalReached",
-        type: "bool",
-      },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_fundContract",
-        type: "address",
-      },
-    ],
-    name: "setGoalReached",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
 ];
@@ -442,6 +386,19 @@ export const CrowdfundAbi = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "goalReached",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",

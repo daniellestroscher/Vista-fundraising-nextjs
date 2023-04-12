@@ -19,7 +19,6 @@ contract CrowdfundMarket is ReentrancyGuard {
         address crowdfundContract;
         address owner;
         uint goal;
-        bool goalReached;
     }
     mapping(uint => CrowdfundObj) public idToCrowdfund;
     mapping(address => uint) addressToId;
@@ -30,9 +29,6 @@ contract CrowdfundMarket is ReentrancyGuard {
         address indexed crowdfundContractAddress,
         address owner,
         uint256 goal
-    );
-    event GoalReached(
-      uint goal
     );
 
     function createCrowdfund(
@@ -51,8 +47,7 @@ contract CrowdfundMarket is ReentrancyGuard {
             _metaUrl,
             crowdfundContractAddress,
             payable(msg.sender),
-            _goal,
-            false
+            _goal
         );
 
         emit CrowdfundCreated(
@@ -64,16 +59,16 @@ contract CrowdfundMarket is ReentrancyGuard {
         );
     }
 
-    function setGoalReached(address _fundContract) public {
-      uint contractId = addressToId[_fundContract];
-      uint goal = idToCrowdfund[contractId].goal;
+    // function setGoalReached(address _fundContract) public {
+    //   uint contractId = addressToId[_fundContract];
+    //   uint goal = idToCrowdfund[contractId].goal;
 
-      require(_fundContract.balance >= goal, "This contract balance does not equal or exceed the goal.");
-      idToCrowdfund[contractId].goalReached = true;
-      _fundsGoalsMet.increment();
+    //   require(_fundContract.balance >= goal, "This contract balance does not equal or exceed the goal.");
+    //   idToCrowdfund[contractId].goalReached = true;
+    //   _fundsGoalsMet.increment();
 
-      emit GoalReached(goal);
-    }
+    //   emit GoalReached(goal);
+    // }
 
     function getCrowdfund(uint _id) public view returns (CrowdfundObj memory) {
       return idToCrowdfund[_id];
@@ -82,12 +77,15 @@ contract CrowdfundMarket is ReentrancyGuard {
     function getActiveFundraisers() public view returns (CrowdfundObj[] memory) {
         uint fundraisersCount = _funraiserIds.current();
         uint goalNotReachedCount = _funraiserIds.current() - _fundsGoalsMet.current();
+        bool goalReached;
         uint index = 0;
 
         CrowdfundObj[] memory fundraisers = new CrowdfundObj[](goalNotReachedCount);
 
         for (uint i = 0; i < fundraisersCount; i++) {
-            if (!idToCrowdfund[i + 1].goalReached) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
+            if (!goalReached) {
                 uint currentFundId = idToCrowdfund[i + 1].fundId;
                 CrowdfundObj storage currentCrowdfund = idToCrowdfund[
                     currentFundId
@@ -133,12 +131,15 @@ contract CrowdfundMarket is ReentrancyGuard {
     {
         uint fundraisersCount = _funraiserIds.current();
         uint myActiveFundraisersCount = 0;
+        bool goalReached;
         uint index = 0;
 
         for (uint i = 0; i < fundraisersCount; i++) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
             if (
                 idToCrowdfund[i + 1].owner == msg.sender &&
-                !idToCrowdfund[i + 1].goalReached
+                !goalReached
             ) {
                 myActiveFundraisersCount++;
             }
@@ -148,9 +149,11 @@ contract CrowdfundMarket is ReentrancyGuard {
         );
 
         for (uint i = 0; i < fundraisersCount; i++) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
             if (
                 idToCrowdfund[i + 1].owner == msg.sender &&
-                !idToCrowdfund[i + 1].goalReached
+                !goalReached
             ) {
                 uint currentFundId = idToCrowdfund[i + 1].fundId;
                 CrowdfundObj storage currentCrowdfund = idToCrowdfund[
@@ -170,12 +173,15 @@ contract CrowdfundMarket is ReentrancyGuard {
     {
         uint fundraisersCount = _funraiserIds.current();
         uint myCompletedFundraisersCount = 0;
+        bool goalReached;
         uint index = 0;
 
         for (uint i = 0; i < fundraisersCount; i++) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
             if (
                 idToCrowdfund[i + 1].owner == msg.sender &&
-                idToCrowdfund[i + 1].goalReached
+                goalReached
             ) {
                 myCompletedFundraisersCount++;
             }
@@ -185,9 +191,11 @@ contract CrowdfundMarket is ReentrancyGuard {
         );
 
         for (uint i = 0; i < fundraisersCount; i++) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
             if (
                 idToCrowdfund[i + 1].owner == msg.sender &&
-                idToCrowdfund[i + 1].goalReached
+                goalReached
             ) {
                 uint currentFundId = idToCrowdfund[i + 1].fundId;
                 CrowdfundObj storage currentCrowdfund = idToCrowdfund[

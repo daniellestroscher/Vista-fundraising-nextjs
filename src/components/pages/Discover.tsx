@@ -14,10 +14,14 @@ function Discover() {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { isConnected } = useAccount();
+
+  const { isConnected, address } = useAccount();
+
   useEffect(() => {
+    if (isConnected) {
       loadCrowdfunds();
-  }, [isConnected]);
+    }
+  }, [isConnected, address]);
 
   async function loadCrowdfunds() {
     const allActiveFundraisers = (await readContract({
@@ -48,13 +52,12 @@ function Discover() {
   }
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
-  if (loadingState === "loaded" && !crowdfundArr.length) {
-    return <h2>No Crowdfunds in this marketplace.</h2>;
+  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
+    return <div className="page"><p className="page-heading">No Crowdfunds in this marketplace.</p></div>;
   }
-
   return (
     <>
-      {crowdfundArr.length !== 0 && (
+      {crowdfundArr.length !== 0 && isConnected && (
         <div>
           <div style={{ position: "fixed", top : "55px", right: "35px"}}>
             <SearchBar
