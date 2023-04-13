@@ -69,22 +69,12 @@
 .progress {
   max-width: 150px;
 }
-.donate-box {
-  border: none;
-  padding: 10px;
-  border-bottom: 1px solid black;
-  background-color: transparent;
+
+.container a:visited {
+  text-decoration: none;
+  color: #333333;
 }
-.donate-box:focus {
-  outline: none;
+.container a:hover {
+  text-decoration: none;
 }
 
-.donate {
-  border: 3px solid rgb(255, 201, 242);
-  background-color: rgb(84, 127, 234);
-  border-radius: 50px;
-  padding: 10px 20px 10px 20px;
-  color: white;
-  margin: 3px;
-  cursor: pointer;
-}

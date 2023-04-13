@@ -60,12 +60,14 @@ function Discover() {
     <>
       {crowdfundArr.length !== 0 && isConnected && (
         <div>
-          <div style={{ position: "fixed", top : "55px", right: "35px"}}>
+          {/* <div style={{ position: "fixed", top : "55px", right: "35px"}}> */}
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              top={65}
+              right={30}
             />
-          </div>
+          {/* </div> */}
           <section>
             <CategoryList
               category={"Environment & Wildlife"}

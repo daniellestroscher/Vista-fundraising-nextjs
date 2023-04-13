@@ -1,16 +1,17 @@
 import { CrowdfundWithMeta } from "../types";
 import "./crowdfund-card.css";
+import DonateBox from "./donate-box";
 
 import { CrowdfundAbi } from "../config";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
-import { sendTransaction, prepareSendTransaction } from "@wagmi/core";
+
 
 type props = {
   crowdfund: CrowdfundWithMeta;
 };
 function CrowdfundCard({ crowdfund }: props) {
-  const [contribution, setContribution] = useState<number | undefined>(0);
+  // const [contribution, setContribution] = useState<number | undefined>(0);
   const [currentContractBalance, setCurrentContractBalance] =
     useState<number>(0);
 
@@ -31,14 +32,17 @@ function CrowdfundCard({ crowdfund }: props) {
     setCurrentContractBalance(Number(amountRaised));
   }, [amountRaised, goalReached]);
 
-  async function donateToCause() {
-    const config = await prepareSendTransaction({
-      request: { to: crowdfund.crowdfundContract, value: contribution },
-    });
-    const { hash } = await sendTransaction(config);
-    console.log(hash, "transaction hash");
+  // async function donateToCause() {
+  //   const config = await prepareSendTransaction({
+  //     request: { to: crowdfund.crowdfundContract, value: contribution },
+  //   });
+  //   const { hash } = await sendTransaction(config);
+  //   console.log(hash, "transaction hash");
+  // }
+
+  function removeCrowdfund() {
+    alert("TODO: create remove function.");
   }
-  function removeCrowdfund() { alert('TODO: create remove function.') }
 
   return (
     <>
@@ -85,7 +89,9 @@ function CrowdfundCard({ crowdfund }: props) {
               </a>
 
               <div className="box">
-                <p className="desc">{crowdfund.description}</p>
+                <a href={`/projects/${crowdfund.fundId}`}>
+                  <p className="desc">{crowdfund.description}</p>
+                </a>
                 <div className="status">
                   <p className="progress">
                     <strong>
@@ -94,18 +100,7 @@ function CrowdfundCard({ crowdfund }: props) {
                     Wei needed to reach our goal.
                   </p>
                   {!goalReached ? (
-                    <div>
-                      <input
-                        className="donate-box"
-                        type="number"
-                        onChange={(e) =>
-                          setContribution(Number(e.target.value))
-                        }
-                      />
-                      <button onClick={donateToCause} className="donate">
-                        Donate
-                      </button>
-                    </div>
+                    <DonateBox crowdfund={crowdfund} />
                   ) : (
                     <div>
                       <button onClick={removeCrowdfund} className="donate">

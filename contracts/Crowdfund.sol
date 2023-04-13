@@ -8,12 +8,14 @@ pragma solidity ^0.8.19;
 contract Crowdfund {
   uint public goal;
   bool public goalReached;
+  uint public raised;
   address CrowdfundOwner;
 
   mapping (address => uint) addressToContribution;
     constructor(uint _goal) {
       goal = _goal;
       goalReached = false;
+      raised = 0;
       CrowdfundOwner = tx.origin;
     }
 
@@ -33,6 +35,7 @@ contract Crowdfund {
     function donate() public payable {
       //require (msg.value >= minContribution, "error: your donation didn't meet minimum requirment");
       addressToContribution[msg.sender] += msg.value;
+      raised += msg.value;
       updateGoalStatus();
     }
     function updateGoalStatus() internal {
@@ -57,6 +60,7 @@ contract Crowdfund {
 
     receive() external payable {
       addressToContribution[msg.sender] += msg.value;
+      raised += msg.value;
       updateGoalStatus();
     }
 }
