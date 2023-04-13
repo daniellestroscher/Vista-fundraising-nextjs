@@ -23,9 +23,10 @@ export default function DropdownMenu({ setFormInput, formInput }: props) {
           setFormInput({ ...formInput, category: e.target.value })
         }
         className="input"
+        defaultValue={"default"}
         required
       >
-        <option value="" disabled selected hidden>
+        <option value="default" disabled>
           Select Category
         </option>
         <option >Children</option>

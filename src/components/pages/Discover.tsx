@@ -7,7 +7,7 @@ import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
-import { useAccount, useContract, useContractRead, useSigner } from "wagmi";
+import { useAccount, useProvider, useSigner } from "wagmi";
 import { readContract } from "@wagmi/core";
 
 function Discover() {
@@ -30,6 +30,7 @@ function Discover() {
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
 
+    console.log(allActiveFundraisers, 'all active')
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);

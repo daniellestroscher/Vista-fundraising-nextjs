@@ -30,7 +30,6 @@ describe("CrowdfundMarket", function () {
       to: oneContractAddress_GoalReached,
       value: goal,
     });
-    await market.setGoalReached(oneContractAddress_GoalReached);
 
     return {
       market,
@@ -67,39 +66,6 @@ describe("CrowdfundMarket", function () {
   });
 
   describe("Getters", function () {
-    describe("setGoalReached", function () {
-      it("should revert with the correct error if called before the goal is reached.", async function () {
-        const { market } = await loadFixture(deployMarket);
-        const goal = ethers.utils.parseEther("1");
-        await market.createCrowdfund(goal, "");
-        const crowdfundContractAddress = (await market.idToCrowdfund(1))
-          .crowdfundContract;
-
-        await expect(
-          market.setGoalReached(crowdfundContractAddress)
-        ).to.be.revertedWith(
-          "This contract balance does not equal or exceed the goal."
-        );
-      });
-
-      it("should set goal reached if it has been reached", async function () {
-        const { market, owner } = await loadFixture(deployMarket);
-        const goal = ethers.utils.parseEther("1");
-        await market.createCrowdfund(goal, "");
-        const crowdfundContractAddress = (await market.idToCrowdfund(1))
-          .crowdfundContract;
-        await owner.sendTransaction({
-          to: crowdfundContractAddress,
-          value: goal,
-        });
-
-        await expect(await market.setGoalReached(crowdfundContractAddress)).to
-          .not.be.reverted;
-        await expect(await market.setGoalReached(crowdfundContractAddress))
-          .to.emit(market, "GoalReached")
-          .withArgs(goal);
-      });
-    });
     describe("getActiveFundraisers", function () {
       it("should get only the active fundraisers (goal not reached)", async function () {
         const {
@@ -128,12 +94,20 @@ describe("CrowdfundMarket", function () {
 
         const fundraisers = await market.getMyFundraisers();
         expect(await fundraisers).to.have.lengthOf(2);
-        expect(await fundraisers[0].crowdfundContract).to.equal(oneContractAddress_GoalReached);
-        expect(await fundraisers[1].crowdfundContract).to.equal(twoContractAddress);
+        expect(await fundraisers[0].crowdfundContract).to.equal(
+          oneContractAddress_GoalReached
+        );
+        expect(await fundraisers[1].crowdfundContract).to.equal(
+          twoContractAddress
+        );
 
-        const otherAccountFundraisers = await market.connect(otherAccount).getMyFundraisers();
+        const otherAccountFundraisers = await market
+          .connect(otherAccount)
+          .getMyFundraisers();
         expect(await otherAccountFundraisers).to.have.length(1);
-        expect(await otherAccountFundraisers[0].crowdfundContract).to.equal(threeContractAddress_NotOwners);
+        expect(await otherAccountFundraisers[0].crowdfundContract).to.equal(
+          threeContractAddress_NotOwners
+        );
       });
     });
   });

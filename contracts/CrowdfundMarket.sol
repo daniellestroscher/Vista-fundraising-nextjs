@@ -10,8 +10,8 @@ import "./Crowdfund.sol";
 contract CrowdfundMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _funraiserIds;
-    Counters.Counter public _fundsGoalsMet;
-    //uint public _fundsGoalsMet;
+    //Counters.Counter private _fundsGoalsMet;
+    //uint _fundsGoalsMet;
 
     struct CrowdfundObj {
         uint fundId;
@@ -59,29 +59,24 @@ contract CrowdfundMarket is ReentrancyGuard {
         );
     }
 
-    // function setGoalReached(address _fundContract) public {
-    //   uint contractId = addressToId[_fundContract];
-    //   uint goal = idToCrowdfund[contractId].goal;
-
-    //   require(_fundContract.balance >= goal, "This contract balance does not equal or exceed the goal.");
-    //   idToCrowdfund[contractId].goalReached = true;
-    //   _fundsGoalsMet.increment();
-
-    //   emit GoalReached(goal);
-    // }
-
     function getCrowdfund(uint _id) public view returns (CrowdfundObj memory) {
       return idToCrowdfund[_id];
     }
 
     function getActiveFundraisers() public view returns (CrowdfundObj[] memory) {
         uint fundraisersCount = _funraiserIds.current();
-        uint goalNotReachedCount = _funraiserIds.current() - _fundsGoalsMet.current();
+        uint fundraiserGoalsMet = 0;
         bool goalReached;
+        for (uint i = 0; i < fundraisersCount; i++) {
+          Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
+          goalReached = contractInstance.goalReached();
+          if (goalReached) fundraiserGoalsMet++;
+        }
+
+        uint goalNotReachedCount = _funraiserIds.current() - fundraiserGoalsMet;
         uint index = 0;
 
         CrowdfundObj[] memory fundraisers = new CrowdfundObj[](goalNotReachedCount);
-
         for (uint i = 0; i < fundraisersCount; i++) {
           Crowdfund contractInstance = Crowdfund(payable(idToCrowdfund[i + 1].crowdfundContract));
           goalReached = contractInstance.goalReached();

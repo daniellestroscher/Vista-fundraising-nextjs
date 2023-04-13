@@ -1,4 +1,4 @@
-export const marketAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+export const marketAddress = "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82";
 export const marketAbi = [
   {
     anonymous: false,
@@ -36,19 +36,6 @@ export const marketAbi = [
     ],
     name: "CrowdfundCreated",
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "_fundsGoalsMet",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
   },
   {
     inputs: [
