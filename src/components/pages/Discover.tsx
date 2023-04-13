@@ -7,7 +7,7 @@ import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import SearchBar from "../SearchBar";
 import { filterFunds } from "../../helperFunctions";
 import CategoryList from "../categoryList";
-import { useAccount, useProvider, useSigner } from "wagmi";
+import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 
 function Discover() {
@@ -30,7 +30,7 @@ function Discover() {
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
 
-    console.log(allActiveFundraisers, 'all active')
+    console.log(allActiveFundraisers, "all active");
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
@@ -54,20 +54,23 @@ function Discover() {
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
   if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
-    return <div className="page"><p className="page-heading">No Crowdfunds in this marketplace.</p></div>;
+    return (
+      <div className="page">
+        <p className="page-heading">No Crowdfunds in this marketplace.</p>
+      </div>
+    );
   }
   return (
     <>
       {crowdfundArr.length !== 0 && isConnected && (
         <div>
-          {/* <div style={{ position: "fixed", top : "55px", right: "35px"}}> */}
-            <SearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              top={65}
-              right={30}
-            />
-          {/* </div> */}
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            top={65}
+            right={30}
+          />
+
           <section>
             <CategoryList
               category={"Environment & Wildlife"}

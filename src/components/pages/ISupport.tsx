@@ -6,7 +6,7 @@ import axios from "axios";
 import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import { useAccount } from "wagmi";
-import { getContract, getProvider, getAccount, readContract } from "@wagmi/core";
+import { readContract } from "@wagmi/core";
 
 function ISupport() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
@@ -26,18 +26,6 @@ function ISupport() {
       functionName: "getActiveFundraisers",
       overrides: { from: address },
     })) as Crowdfund[];
-
-    // const provider = getProvider();
-    // const marketContract = getContract({
-    //   address: marketAddress,
-    //   abi: marketAbi,
-    //   signerOrProvider: provider,
-    // });
-
-    // const allCrowdfunds =
-    //   (await marketContract.getActiveFundraisers()) as Crowdfund[];
-    // console.log(allCrowdfunds, 'all funds')
-    console.log(allActiveCrowdfunds, 'actibe funds list')
 
     let crowdfundList = (await Promise.all(
       allActiveCrowdfunds.map(async (crowdfund: Crowdfund) => {
@@ -69,14 +57,6 @@ function ISupport() {
   async function filterListISupport(crowdfundList: CrowdfundWithMeta[]) {
     for (let i = 0; i < crowdfundList.length; i++) {
       //filter out all except ones that signer has contributed to.
-      // const provider = getProvider();
-      // const crowdfundContractInstance = getContract({
-      //   address: crowdfundList[i].crowdfundContract,
-      //   abi: CrowdfundAbi,
-      //   signerOrProvider: provider,
-      // });
-      // const account = getAccount();
-      // let signerAddress = account.address;
       const donatedToContract = (await readContract({
           address: crowdfundList[i].crowdfundContract as `0x${string}`,
           abi: CrowdfundAbi,

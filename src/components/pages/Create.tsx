@@ -9,7 +9,7 @@ import { marketAddress, marketAbi } from "../../config";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
-import { useContract, useProvider, useSigner, useAccount } from "wagmi";
+import { useContract, useSigner, useAccount } from "wagmi";
 window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;

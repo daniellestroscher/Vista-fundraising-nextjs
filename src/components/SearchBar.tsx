@@ -1,8 +1,8 @@
+import { useState } from "react";
 import "./SearchBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
 
 type Props = {
   searchQuery: string;
@@ -10,7 +10,12 @@ type Props = {
   top: number;
   right: number;
 };
-export default function SearchBar({ searchQuery, setSearchQuery, top, right }: Props) {
+export default function SearchBar({
+  searchQuery,
+  setSearchQuery,
+  top,
+  right,
+}: Props) {
   const [showInput, setShowInput] = useState(false);
 
   return (
@@ -18,11 +23,9 @@ export default function SearchBar({ searchQuery, setSearchQuery, top, right }: P
       className="search-container"
       onMouseEnter={() => setShowInput(true)}
       onMouseLeave={() => setShowInput(false)}
-      style={{position: "absolute", top: `${top}px`, right: `${right}px`}}
+      style={{ position: "absolute", top: `${top}px`, right: `${right}px` }}
     >
-      <div
-        className="search-box"
-      >
+      <div className="search-box">
         <FontAwesomeIcon
           icon={faMagnifyingGlass as IconProp}
           className="search-icon"

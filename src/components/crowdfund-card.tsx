@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import { CrowdfundWithMeta } from "../types";
 import "./crowdfund-card.css";
 import DonateBox from "./donate-box";
 
 import { CrowdfundAbi } from "../config";
-import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 
 
@@ -11,14 +11,13 @@ type props = {
   crowdfund: CrowdfundWithMeta;
 };
 function CrowdfundCard({ crowdfund }: props) {
-  // const [contribution, setContribution] = useState<number | undefined>(0);
-  const [currentContractBalance, setCurrentContractBalance] =
+  const [totalRaised, setTotalRaised] =
     useState<number>(0);
 
-  const { data: amountRaised } = useContractRead({
+  const { data: raised } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
     abi: CrowdfundAbi,
-    functionName: "getBalance",
+    functionName: "raised",
     watch: true,
   });
   const { data: goalReached } = useContractRead({
@@ -29,16 +28,8 @@ function CrowdfundCard({ crowdfund }: props) {
   });
 
   useEffect(() => {
-    setCurrentContractBalance(Number(amountRaised));
-  }, [amountRaised, goalReached]);
-
-  // async function donateToCause() {
-  //   const config = await prepareSendTransaction({
-  //     request: { to: crowdfund.crowdfundContract, value: contribution },
-  //   });
-  //   const { hash } = await sendTransaction(config);
-  //   console.log(hash, "transaction hash");
-  // }
+    setTotalRaised(Number(raised));
+  }, [raised, goalReached]);
 
   function removeCrowdfund() {
     alert("TODO: create remove function.");
@@ -95,7 +86,7 @@ function CrowdfundCard({ crowdfund }: props) {
                 <div className="status">
                   <p className="progress">
                     <strong>
-                      {String(crowdfund.goal - currentContractBalance)}
+                      {String(crowdfund.goal - totalRaised)}
                     </strong>{" "}
                     Wei needed to reach our goal.
                   </p>

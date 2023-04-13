@@ -1,14 +1,9 @@
+import { useState } from "react";
 import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-import { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Discover from "./components/pages/Discover";
 import Create from "./components/pages/Create";
@@ -32,9 +27,6 @@ import {
   configureChains,
   createClient,
   useAccount,
-  useConnect,
-  useNetwork,
-  useSwitchNetwork,
   WagmiConfig,
 } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli, localhost } from "wagmi/chains";
@@ -62,10 +54,6 @@ function App() {
   });
   const [menuState, setMenuState] = useState(false);
   const { isConnected } = useAccount();
-
-  useEffect(() => {
-
-  }, [isConnected]);
 
   return (
     <>
@@ -123,7 +111,6 @@ function App() {
           }
         </RainbowKitProvider>
       </WagmiConfig>
-      {/* <Web3Modal projectId={projectId} ethereumClient={ethereumClient} /> */}
     </>
   );
 }

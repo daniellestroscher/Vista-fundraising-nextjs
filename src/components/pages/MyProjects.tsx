@@ -1,12 +1,11 @@
-import react, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./MyProjects.css";
 import axios from "axios";
 import { marketAbi, marketAddress } from "../../config";
 import { Crowdfund, CrowdfundWithMeta } from "../../types";
 import CrowdfundCard from "../crowdfund-card";
-import Web3Modal from "web3modal";
-import { useAccount, useContract, useProvider, useSigner } from "wagmi";
-import { getContract, getProvider, readContract } from "@wagmi/core";
+import { useAccount } from "wagmi";
+import { readContract } from "@wagmi/core";
 
 function MyProjects() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
@@ -46,8 +45,6 @@ function MyProjects() {
     setCrowdfundArr(crowdfundList);
     setLoadingState("loaded");
   }
-
-  console.log(crowdfundArr, 'my crowdfunds');
 
   if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
     return <div className="page"><p className="page-heading">You haven't created any crowdfunds.</p></div>;
