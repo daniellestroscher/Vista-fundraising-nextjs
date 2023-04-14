@@ -1,0 +1,14 @@
+/* see Discover.css for .page and .page-heading */
+
+.crowdfund-grid {
+  display: grid;
+  gap: -5px;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px;
+}
+
+@media only screen and (max-width: 1025px) {
+  .crowdfund-grid {
+    grid-template-columns: 1fr;
+  }
+}

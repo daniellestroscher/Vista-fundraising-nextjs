@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import "./ISupport.css";
 
-import CrowdfundCard from "../crowdfund-card";
+import CrowdfundCard from "../../crowdfund-card";
 import axios from "axios";
-import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
-import { Crowdfund, CrowdfundWithMeta } from "../../types";
+import { CrowdfundAbi, marketAbi, marketAddress } from "../../../config";
+import { Crowdfund, CrowdfundWithMeta } from "../../../types";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
+import NavBar from "../../navBar";
+import { filterFunds } from "../../../helperFunctions";
 
 function ISupport() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { address, isConnected } = useAccount();
@@ -59,12 +62,12 @@ function ISupport() {
     for (let i = 0; i < crowdfundList.length; i++) {
       //filter out all except ones that signer has contributed to.
       const donatedToContract = (await readContract({
-          address: crowdfundList[i].crowdfundContract as `0x${string}`,
-          abi: CrowdfundAbi,
-          functionName: "checkIfContributor",
-          args: [address],
-          overrides: { from: address },
-        })) as Crowdfund[];
+        address: crowdfundList[i].crowdfundContract as `0x${string}`,
+        abi: CrowdfundAbi,
+        functionName: "checkIfContributor",
+        args: [address],
+        overrides: { from: address },
+      })) as Crowdfund[];
 
       let donated = [] as CrowdfundWithMeta[];
       if (donatedToContract) {
@@ -73,17 +76,23 @@ function ISupport() {
       return donated;
     }
   }
+  const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
-  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
-    return <div className="page"><p className="page-heading">You don't support any active projects.</p></div>;
-  }
   return (
     <>
-      {crowdfundArr.length !== 0 && (
+      <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
         <div className="page">
-          <p className="page-heading">You support these awesome projects. see how they're doing!</p>
+          <p className="page-heading">You don't support any active projects.</p>
+        </div>
+      )}
+      {crowdfundArr.length !== 0 && isConnected && (
+        <div className="page">
+          <p className="page-heading">
+            You support these awesome projects. see how they're doing!
+          </p>
           <div className="crowdfund-grid">
-            {crowdfundArr.map((crowdfund, i) => {
+            {searchableCrowdfunds.map((crowdfund, i) => {
               return (
                 <div key={i}>
                   <CrowdfundCard crowdfund={crowdfund} />

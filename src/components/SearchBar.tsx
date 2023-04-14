@@ -7,14 +7,10 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 type Props = {
   searchQuery: string;
   setSearchQuery: (arg: string) => void;
-  top: number;
-  right: number;
 };
 export default function SearchBar({
   searchQuery,
   setSearchQuery,
-  top,
-  right,
 }: Props) {
   const [showInput, setShowInput] = useState(false);
 
@@ -23,7 +19,6 @@ export default function SearchBar({
       className="search-container"
       onMouseEnter={() => setShowInput(true)}
       onMouseLeave={() => setShowInput(false)}
-      style={{ position: "absolute", top: `${top}px`, right: `${right}px` }}
     >
       <div className="search-box">
         <FontAwesomeIcon
@@ -31,18 +26,16 @@ export default function SearchBar({
           className="search-icon"
         />
         {
-          <form>
-            <input
-              className={
-                showInput ? "search-input slide-search-input" : "search-input"
-              }
-              value={searchQuery}
-              onInput={(e) => setSearchQuery(e.currentTarget.value)}
-              type="text"
-              id="header-search"
-              placeholder="Search by name or category"
-            />
-          </form>
+          <input
+            className={
+              showInput ? "search-input slide-search-input" : "search-input"
+            }
+            value={searchQuery}
+            onInput={(e) => setSearchQuery(e.currentTarget.value)}
+            type="text"
+            id="header-search"
+            placeholder="Search by name or category"
+          />
         }
       </div>
     </div>

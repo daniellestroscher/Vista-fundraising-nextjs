@@ -4,21 +4,11 @@
   justify-content: center;
   align-items: center;
 }
+
 .page-heading {
   border: 2px solid rgb(173, 212, 181);
   border-radius: 50px;
   width: 600px;
   padding: 10px;
-}
-.crowdfund-grid {
-  display: grid;
-  gap: -5px;
-  grid-template-columns: 1fr 1fr;
-  margin: 10px;
-}
-
-@media only screen and (max-width: 1025px) {
-  .crowdfund-grid {
-    grid-template-columns: 1fr;
-  }
+  margin-top: 40px;
 }

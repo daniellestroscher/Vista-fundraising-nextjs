@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import "./Discover.css";
 
 import axios from "axios";
-import { marketAddress, marketAbi } from "../../config";
-import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import SearchBar from "../SearchBar";
-import { filterFunds } from "../../helperFunctions";
-import CategoryList from "../categoryList";
+import { marketAddress, marketAbi } from "../../../config";
+import { Crowdfund, CrowdfundWithMeta } from "../../../types";
+import { filterFunds } from "../../../helperFunctions";
+import CategoryList from "../../categoryList";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
+import NavBar from "../../navBar";
 
 function Discover() {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
   const { isConnected, address } = useAccount();
 
   useEffect(() => {
@@ -52,25 +51,19 @@ function Discover() {
     setCrowdfundArr(crowdfundList);
     setLoadingState("loaded");
   }
+
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
-  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
-    return (
-      <div className="page">
-        <p className="page-heading">No Crowdfunds in this marketplace.</p>
-      </div>
-    );
-  }
   return (
     <>
+      {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
+        <div className="page">
+          <p className="page-heading">No Crowdfunds in this marketplace.</p>
+        </div>
+      )}
       {crowdfundArr.length !== 0 && isConnected && (
         <div>
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            top={65}
-            right={30}
-          />
+          <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
           <section>
             <CategoryList

@@ -1,15 +1,16 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DropdownMenu from "../custom-dropdown";
+import DropdownMenu from "../../custom-dropdown";
 import "./Create.css";
 
 //@ts-ignore
 import { create } from "ipfs-http-client";
-import { marketAddress, marketAbi } from "../../config";
+import { marketAddress, marketAbi } from "../../../config";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
 import { useContract, useSigner, useAccount } from "wagmi";
+import NavBar from "../../navBar";
 window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
@@ -67,7 +68,8 @@ function Create() {
   }
 
   async function createCrowdfund() {
-    const { name, descriptionShort, descriptionLong, goal, category } = formInput;
+    const { name, descriptionShort, descriptionLong, goal, category } =
+      formInput;
     console.log(name, descriptionShort, goal, category, fileUrl);
     if (!name || !descriptionShort || !goal || !fileUrl || !category) {
       alert("missing felids are required");
@@ -101,6 +103,7 @@ function Create() {
 
   return (
     <>
+      <NavBar searchQuery={""} setSearchQuery={undefined} />
       {isConnected && (
         <div className="page">
           <div className="form">

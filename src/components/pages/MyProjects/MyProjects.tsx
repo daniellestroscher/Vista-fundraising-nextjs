@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import "./MyProjects.css";
 import axios from "axios";
-import { marketAbi, marketAddress } from "../../config";
-import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import CrowdfundCard from "../crowdfund-card";
+import { marketAbi, marketAddress } from "../../../config";
+import { Crowdfund, CrowdfundWithMeta } from "../../../types";
+import CrowdfundCard from "../../crowdfund-card";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
+import NavBar from "../../navBar";
+import { filterFunds } from "../../../helperFunctions";
 
 function MyProjects() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { address, isConnected } = useAccount();
@@ -47,17 +50,23 @@ function MyProjects() {
     setLoadingState("loaded");
   }
 
-  if (loadingState === "loaded" && !crowdfundArr.length && isConnected) {
-    return <div className="page"><p className="page-heading">You haven't created any crowdfunds.</p></div>;
-  }
+  const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
   return (
     <>
+      <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
+        <div className="page">
+          <p className="page-heading">You haven't created any crowdfunds.</p>
+        </div>
+      )}
       {crowdfundArr.length !== 0 && (
         <div className="page">
-          <p className="page-heading">You created these awesome projects. see how they're doing!</p>
+          <p className="page-heading">
+            You created these awesome projects. see how they're doing!
+          </p>
           <div className="crowdfund-grid">
-            {crowdfundArr.map((crowdfund, i) => {
+            {searchableCrowdfunds.map((crowdfund, i) => {
               return (
                 <div key={i}>
                   <CrowdfundCard crowdfund={crowdfund} />

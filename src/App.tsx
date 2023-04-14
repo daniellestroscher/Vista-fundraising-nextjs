@@ -1,16 +1,11 @@
-import { useState } from "react";
 import "./App.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./components/pages/LandingPage";
-import Discover from "./components/pages/Discover";
-import Create from "./components/pages/Create";
-import MyProjects from "./components/pages/MyProjects";
-import ISupport from "./components/pages/ISupport";
-import ProjectInfo from "./components/pages/ProjectInfo";
-import Menu from "./components/Menu";
+import LandingPage from "./components/pages/LandingPage/LandingPage";
+import Discover from "./components/pages/Discover/Discover";
+import Create from "./components/pages/Create/Create";
+import MyProjects from "./components/pages/MyProjects/MyProjects";
+import ISupport from "./components/pages/ISupport/ISupport";
+import ProjectInfo from "./components/pages/ProjectInfo/ProjectInfo";
 
 import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
@@ -48,7 +43,6 @@ function App() {
     connectors, //connectors: w3mConnectors({ projectId, version: 1, chains }),
     provider,
   });
-  const [menuState, setMenuState] = useState(false);
   const { isConnected } = useAccount();
 
   return (
@@ -80,20 +74,10 @@ function App() {
                         largeScreen: "full",
                       }}
                     />
-                    {isConnected && (
-                      <FontAwesomeIcon
-                        icon={faBars}
-                        onClick={(e) => setMenuState(!menuState)}
-                        className="menu-bars"
-                      />
-                    )}
                   </section>
                 </div>
               </header>
               <div>{!isConnected && <LandingPage />}</div>
-
-              <Menu setMenuState={setMenuState} menuState={menuState} />
-
               <Router>
                 <Routes>
                   <Route path="/" element={<Discover />} />

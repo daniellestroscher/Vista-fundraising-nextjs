@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DonateBox from "../donate-box";
+import DonateBox from "../../donate-box";
 import "./ProjectInfo.css";
 
-import { Crowdfund, CrowdfundWithMeta } from "../../types";
-import { CrowdfundAbi, marketAbi, marketAddress } from "../../config";
+import { Crowdfund, CrowdfundWithMeta } from "../../../types";
+import { CrowdfundAbi, marketAbi, marketAddress } from "../../../config";
 import axios from "axios";
 import { useContractRead, useAccount } from "wagmi";
 import { readContract, prepareWriteContract, writeContract } from "@wagmi/core";
@@ -110,7 +110,6 @@ export default function ProjectInfo() {
           <section className="description-box">
             <p className="description-short">{crowdfund.descriptionShort}</p>
             <div></div>
-            {/* TODO: add longer description input */}
             <p className="description-long">{crowdfund.descriptionLong}</p>
           </section>
           <section className="goal-stats-box">

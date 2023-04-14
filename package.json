@@ -2,10 +2,12 @@
   "name": "defi-crowdfund",
   "version": "0.1.0",
   "private": true,
+  
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.6.5",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@jest/globals": "^29.5.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@nomiclabs/hardhat-waffle": "^2.0.5",
@@ -33,6 +35,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "ts-jest": "^29.1.0",
     "typescript": "^4.9.5",
     "wagmi": "^0.12.9",
     "web-vitals": "^2.1.4",
