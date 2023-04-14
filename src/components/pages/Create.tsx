@@ -35,7 +35,8 @@ function Create() {
   const [fileUrl, setFileUrl] = useState<string>("");
   const [formInput, setFormInput] = useState({
     name: "",
-    description: "",
+    descriptionShort: "",
+    descriptionLong: "",
     goal: 0,
     category: "",
   });
@@ -66,16 +67,17 @@ function Create() {
   }
 
   async function createCrowdfund() {
-    const { name, description, goal, category } = formInput;
-    console.log(name, description, goal, category, fileUrl);
-    if (!name || !description || !goal || !fileUrl || !category) {
-      alert("all felids are required");
+    const { name, descriptionShort, descriptionLong, goal, category } = formInput;
+    console.log(name, descriptionShort, goal, category, fileUrl);
+    if (!name || !descriptionShort || !goal || !fileUrl || !category) {
+      alert("missing felids are required");
       return;
     }
 
     const data = JSON.stringify({
       name,
-      description,
+      descriptionShort,
+      descriptionLong,
       goal,
       category,
       image: fileUrl,
@@ -110,10 +112,19 @@ function Create() {
               }
             />
             <textarea
-              placeholder="Description"
-              className="input"
+              placeholder="Short Description"
+              maxLength={240}
+              className="input textarea"
               onChange={(e) =>
-                setFormInput({ ...formInput, description: e.target.value })
+                setFormInput({ ...formInput, descriptionShort: e.target.value })
+              }
+              style={{ height: "15px" }}
+            />
+            <textarea
+              placeholder="Long Description (optional)"
+              className="input textarea"
+              onChange={(e) =>
+                setFormInput({ ...formInput, descriptionLong: e.target.value })
               }
               style={{ height: "15px" }}
             />

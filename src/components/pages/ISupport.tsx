@@ -34,7 +34,8 @@ function ISupport() {
           fundId: Number(crowdfund.fundId),
           crowdfundContract: crowdfund.crowdfundContract,
           name: meta.data.name,
-          description: meta.data.description,
+          descriptionShort: meta.data.descriptionShort,
+          descriptionLong: meta.data.descriptionLong,
           image: meta.data.image,
           category: meta.data.category,
           owner: crowdfund.owner,
@@ -81,7 +82,7 @@ function ISupport() {
       {crowdfundArr.length !== 0 && (
         <div className="page">
           <p className="page-heading">You support these awesome projects. see how they're doing!</p>
-          <div className="crowdfund-list">
+          <div className="crowdfund-grid">
             {crowdfundArr.map((crowdfund, i) => {
               return (
                 <div key={i}>

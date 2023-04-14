@@ -55,7 +55,8 @@ export default function ProjectInfo() {
       fundId: Number(crowdfundObj.fundId),
       crowdfundContract: crowdfundObj.crowdfundContract,
       name: meta.data.name,
-      description: meta.data.description,
+      descriptionShort: meta.data.descriptionShort,
+      descriptionLong: meta.data.descriptionLong,
       image: meta.data.image,
       category: meta.data.category,
       owner: crowdfundObj.owner,
@@ -107,10 +108,10 @@ export default function ProjectInfo() {
             )}
           </div>
           <section className="description-box">
-            <p className="description-short">{crowdfund.description}</p>
+            <p className="description-short">{crowdfund.descriptionShort}</p>
             <div></div>
             {/* TODO: add longer description input */}
-            <p className="description-long">{crowdfund.description}</p>
+            <p className="description-long">{crowdfund.descriptionLong}</p>
           </section>
           <section className="goal-stats-box">
             <h4>Raised: {totalRaised} Wei</h4>

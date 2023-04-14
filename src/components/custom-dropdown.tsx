@@ -2,14 +2,16 @@ type props = {
   setFormInput: React.Dispatch<
     React.SetStateAction<{
       name: string;
-      description: string;
+      descriptionShort: string;
+      descriptionLong: string;
       goal: number;
       category: string;
     }>
   >;
   formInput: {
     name: string;
-    description: string;
+    descriptionShort: string;
+    descriptionLong: string;
     goal: number;
     category: string;
   };

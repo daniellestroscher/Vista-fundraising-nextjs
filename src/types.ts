@@ -10,7 +10,8 @@ export interface CrowdfundWithMeta {
   fundId: number,
   crowdfundContract: string;
   name: string;
-  description: string;
+  descriptionShort: string;
+  descriptionLong?: string;
   image: string;
   category: string;
   owner: string;

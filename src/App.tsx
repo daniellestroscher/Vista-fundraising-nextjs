@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./components/LandingPage";
+import LandingPage from "./components/pages/LandingPage";
 import Discover from "./components/pages/Discover";
 import Create from "./components/pages/Create";
 import MyProjects from "./components/pages/MyProjects";
@@ -17,18 +17,14 @@ import { infuraProvider } from "wagmi/providers/infura";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
+  darkTheme,
   getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { w3mProvider } from "@web3modal/ethereum";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  configureChains,
-  createClient,
-  useAccount,
-  WagmiConfig,
-} from "wagmi";
+import { configureChains, createClient, useAccount, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli, localhost } from "wagmi/chains";
 
 const chainList = [goerli, polygon, localhost, arbitrum, mainnet];

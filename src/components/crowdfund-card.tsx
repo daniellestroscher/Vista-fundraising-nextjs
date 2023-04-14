@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { CrowdfundWithMeta } from "../types";
 import "./crowdfund-card.css";
 import DonateBox from "./donate-box";
+import { useLocation } from 'react-router-dom';
 
 import { CrowdfundAbi } from "../config";
-import { useContractRead } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
 
 
 type props = {
@@ -13,6 +14,7 @@ type props = {
 function CrowdfundCard({ crowdfund }: props) {
   const [totalRaised, setTotalRaised] =
     useState<number>(0);
+    const location = useLocation();
 
   const { data: raised } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
@@ -81,7 +83,7 @@ function CrowdfundCard({ crowdfund }: props) {
 
               <div className="box">
                 <a href={`/projects/${crowdfund.fundId}`}>
-                  <p className="desc">{crowdfund.description}</p>
+                  <p className="desc">{crowdfund.descriptionShort}</p>
                 </a>
                 <div className="status">
                   <p className="progress">
@@ -90,7 +92,7 @@ function CrowdfundCard({ crowdfund }: props) {
                     </strong>{" "}
                     Wei needed to reach our goal.
                   </p>
-                  {!goalReached ? (
+                  {!goalReached && location.pathname != "/my-projects" ? (
                     <DonateBox crowdfund={crowdfund} />
                   ) : (
                     <div>
