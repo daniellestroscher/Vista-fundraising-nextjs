@@ -5,7 +5,7 @@ import DonateBox from "./donate-box";
 import { useLocation } from 'react-router-dom';
 
 import { CrowdfundAbi } from "../config";
-import { useAccount, useContractRead } from "wagmi";
+import { useContractRead } from "wagmi";
 
 
 type props = {

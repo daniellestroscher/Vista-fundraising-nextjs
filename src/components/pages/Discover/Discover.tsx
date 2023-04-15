@@ -56,6 +56,7 @@ function Discover() {
 
   return (
     <>
+      <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
         <div className="page">
           <p className="page-heading">No Crowdfunds in this marketplace.</p>
@@ -63,8 +64,6 @@ function Discover() {
       )}
       {crowdfundArr.length !== 0 && isConnected && (
         <div>
-          <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
           <section>
             <CategoryList
               category={"Environment & Wildlife"}

@@ -42,10 +42,8 @@ function Create() {
     category: "",
   });
   let navigate = useNavigate();
-  const { address, isConnected } = useAccount();
-  console.log(address, "address");
+  const { isConnected } = useAccount();
   const { data: signer } = useSigner();
-  console.log(signer, "signer");
 
   const marketContract = useContract({
     address: marketAddress,
@@ -116,7 +114,7 @@ function Create() {
             />
             <textarea
               placeholder="Short Description"
-              maxLength={240}
+              maxLength={250}
               className="input textarea"
               onChange={(e) =>
                 setFormInput({ ...formInput, descriptionShort: e.target.value })
