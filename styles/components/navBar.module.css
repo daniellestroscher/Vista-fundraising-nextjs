@@ -1,0 +1,64 @@
+.appHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(63, 63, 63);
+  margin-bottom: 100px;
+}
+.upperHeader {
+  display: flex;
+  position: fixed;
+  flex-direction: row;
+  width: 85vw;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 1;
+}
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 10px;
+}
+.name {
+  color: #7789ee;
+}
+@media only screen and (max-width: 940px) {
+  .title {
+    flex-direction: column;
+  }
+  .name, .slogan {
+    margin: 0;
+    padding: 0;
+    align-self: flex-start;
+  }
+}
+.connectButtonMenu {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  align-self: flex-start;
+}
+
+.navContainer {
+  position: fixed;
+  top: 70px;
+  right: 80px;
+  z-index: 1;
+}
+
+.navigationBox {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: auto;
+}
+
+.menuBars {
+  align-self: center;
+  cursor: pointer;
+  height: 20px;
+  margin-left: 5px;
+}

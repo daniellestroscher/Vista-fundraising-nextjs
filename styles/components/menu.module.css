@@ -1,0 +1,67 @@
+.nav {
+  width: 50vw;
+  height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+
+  background-color: #f2cefc;
+  flex-direction: column;
+  gap: 25px;
+  z-index: 2;
+
+  transition: width .75s ease-in-out;
+  -moz-transition: width .75s ease-in-out;
+  -ms-transition: width .75s ease-in-out;
+  -o-transition: width .75s ease-in-out;
+  -webkit-transition: width .75s ease-in-out;
+}
+.closeIcon {
+  height: 20px;
+  align-self: flex-end;
+  margin: 30px;
+  cursor: pointer;
+}
+.navItem {
+  display: flex;
+  justify-content: center;
+  border: 3px solid white;
+  color: #3535b4;
+  border-radius: 50px;
+  margin: 0px 30px 0px 30px;
+  width: auto;
+  height: 70px;
+  overflow: hidden;
+  white-space: nowrap;
+
+  transition: border .5s ease;
+  -moz-transition: border .5s ease;
+  -ms-transition: border .5s ease;
+  -o-transition: border .5s ease;
+  -webkit-transition: border .5s ease;
+}
+.slide {
+  width: 0px;
+  overflow: hidden;
+}
+
+.hideOverflow {
+  border: 3px solid transparent;
+}
+
+.navItem:visited {
+  text-decoration: none;
+  color: #3535b4;
+}
+.navItem:hover {
+  text-decoration: none;
+  border: 3px solid #7789ee;
+  background-color: white;
+}
+.navItem:link {
+  text-decoration: none;
+  color: inherit;
+}
