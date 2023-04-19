@@ -1,46 +1,6 @@
 import { ethers } from "ethers";
 import { CrowdfundWithMeta } from "./types";
-import { CrowdfundAbi, marketAbi, marketAddress } from "./config";
-
-
-// export async function setCrowdfundGoalReached(
-//   marketContractInstance: ethers.Contract,
-//   crowdfundAddress: string
-// ) {
-//   let transactionToSetGoalReached = await marketContractInstance.setGoalReached(
-//     crowdfundAddress
-//   );
-//   let tx = await transactionToSetGoalReached.wait();
-//   console.log(tx);
-// }
-
-// export async function getFundBalance(
-//   _crowdfund: CrowdfundWithMeta,
-//   signer: ethers.Signer
-// ) {
-//   //const signer = provider.getSigner();
-//   const crowdfundContractInstance = new ethers.Contract(
-//     _crowdfund.crowdfundContract,
-//     CrowdfundAbi,
-//     signer
-//   );
-
-//   let currentContractBalance = await crowdfundContractInstance.getBalance();
-//   currentContractBalance = currentContractBalance.toNumber();
-//   if (
-//     currentContractBalance >= _crowdfund.goal &&
-//     _crowdfund.goalReached !== true
-//   ) {
-//     const marketContract = new ethers.Contract(
-//       marketAddress,
-//       marketAbi,
-//       signer
-//     );
-//     setCrowdfundGoalReached(marketContract, _crowdfund.crowdfundContract);
-//   }
-
-//   return { currentContractBalance, crowdfundContractInstance };
-// }
+import { CrowdfundAbi, MarketAbi, MarketAddress } from "../config";
 
 export const filterFunds = (fundList: CrowdfundWithMeta[], query: string) => {
   if (!query) {

@@ -1,34 +1,65 @@
 import { useState } from "react";
-import "./navBar.css";
-import Menu from "./Menu";
-import SearchBar from "./SearchBar";
+import styles from "../../styles/components/navBar.module.css";
+import Menu from "./menu";
+import SearchBar from "./searchBar";
 
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 type props = {
   searchQuery: string;
   setSearchQuery: undefined | ((arg: string) => void);
-}
+};
 export default function NavBar({ searchQuery, setSearchQuery }: props) {
   const [menuState, setMenuState] = useState(false);
-  const location = useLocation();
-  return (
-    <div className="nav-container">
-    <section className="navigation">
-      {
-        location.pathname !== "/create" &&
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery as (arg: string) => void} />
-      }
-      <FontAwesomeIcon
-        icon={faBars}
-        onClick={(e) => setMenuState(!menuState)}
-        className="menu-bars"
-      />
-    </section>
+  const router = useRouter();
+  const { isConnected } = useAccount();
 
-    <Menu setMenuState={setMenuState} menuState={menuState} />
-    </div>
+  return (
+    <>
+      <section className={styles.appHeader}>
+        <div className={styles.upperHeader}>
+          <div className={styles.title}>
+            <h2 className={styles.name}>Vista Fundraising,</h2>
+            <h4 className={styles.slogan}>
+              support projects that make a difference.
+            </h4>
+          </div>
+          <section className={styles.connectButtonMenu}>
+            <ConnectButton
+              chainStatus="icon"
+              showBalance={false}
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
+          </section>
+        </div>
+      </section>
+      {router.pathname === "/" && !isConnected ? (
+        <></>
+      ) : (
+        <div className={styles.navContainer}>
+          <section className={styles.navigationBox}>
+            {router.pathname !== "/create" && (
+              <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery as (arg: string) => void}
+              />
+            )}
+            <FontAwesomeIcon
+              icon={faBars}
+              onClick={() => setMenuState(!menuState)}
+              className={styles.menuBars}
+            />
+          </section>
+        </div>
+      )}
+      <Menu setMenuState={setMenuState} menuState={menuState} />
+    </>
   );
 }

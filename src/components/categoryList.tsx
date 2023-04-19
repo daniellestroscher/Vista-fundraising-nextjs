@@ -1,13 +1,12 @@
-import "./categoryList.css"
+import styles from "../../styles/components/categoryList.module.css";
 import { CrowdfundWithMeta } from "../types";
-import CrowdfundCard from "./crowdfund-card";
+//import CrowdfundCard from "./crowdfund-card";
 
 type props = {
   category: string;
   list: CrowdfundWithMeta[];
 };
 export default function CategoryList({ category, list }: props) {
-
   let filteredList = list.filter((crowdfund) => {
     return crowdfund.category === category;
   });
@@ -15,11 +14,7 @@ export default function CategoryList({ category, list }: props) {
   return (
     <>
       {filteredList.length !== 0 && (
-        <h4
-          className="category-title"
-        >
-          {category}
-        </h4>
+        <h4 className={styles.categoryTitle}>{category}</h4>
       )}
       <div
         style={{
@@ -34,7 +29,8 @@ export default function CategoryList({ category, list }: props) {
           filteredList.map((item, i) => {
             return (
               <div key={i}>
-                <CrowdfundCard crowdfund={item} />
+                im a card
+                {/* <CrowdfundCard crowdfund={item} /> */}
               </div>
             );
           })}

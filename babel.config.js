@@ -3,10 +3,11 @@ module.exports = {
     [
       "@babel/preset-env",
       {
-        modules: "auto", // Set modules option to "false" or "auto"
+        modules: "auto",
       },
     ],
     "@babel/preset-typescript",
-    "@babel/preset-react",
+    "@babel/preset-react", // Add this preset for handling JSX syntax
   ],
+  //plugins: ["@babel/plugin-proposal-do-expressions"],
 };
