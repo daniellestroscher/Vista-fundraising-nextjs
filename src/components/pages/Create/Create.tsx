@@ -1,10 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DropdownMenu from "../../custom-dropdown";
 import "./Create.css";
 
-//@ts-ignore
-import { create } from "ipfs-http-client";
+import { create, IPFSHTTPClient } from "ipfs-http-client";
 import { marketAddress, marketAbi } from "../../../config";
 import { ethers } from "ethers";
 
@@ -16,11 +15,12 @@ window.Buffer = window.Buffer || Buffer;
 const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
 const apiKeySecret = process.env.REACT_APP_INFURA_SECRET;
 
-async function setUpIpfsClient() {
+async function createIpfsClient() {
   const auth =
     "Basic " +
     Buffer.from(infuraProjectId + ":" + apiKeySecret).toString("base64");
   console.log(auth, "this is the auth string");
+
   const client = create({
     host: "ipfs.infura.io",
     port: 5001,
@@ -28,12 +28,13 @@ async function setUpIpfsClient() {
     headers: {
       authorization: auth,
     },
-  });
+  }) as IPFSHTTPClient;
   return client;
 }
 
 function Create() {
-  const [fileUrl, setFileUrl] = useState<string>("");
+  const [file, setFile] = useState<File>();
+  const [fileUrl, setFileUrl] = useState<string | ArrayBuffer>("");
   const [formInput, setFormInput] = useState({
     name: "",
     descriptionShort: "",
@@ -51,17 +52,28 @@ function Create() {
     signerOrProvider: signer,
   }) as ethers.Contract;
 
-  async function onFileChange(e: ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    if (file) {
+      let fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = (e) => {
+        const { result } = e.target as FileReader;
+        if (result) {
+          setFileUrl(result);
+        }
+      };
+    }
+  }, [file]);
+
+  function onFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const imageMimeType = /image\/(png|jpg|jpeg)/i;
     const file = e.target.files && e.target.files[0];
-    try {
-      const client = await setUpIpfsClient();
-      const added = await client.add(file as File, {
-        progress: (prog) => console.log(`received ${prog}`),
-      });
-      const url = `https://fund-meta.infura-ipfs.io/ipfs/${added.path}`;
-      setFileUrl(url);
-    } catch (err) {
-      console.log(err);
+    if (file) {
+      if (!file.type.match(imageMimeType)) {
+        alert("Image mime type is not valid");
+        return;
+      }
+      setFile(file);
     }
   }
 
@@ -84,9 +96,9 @@ function Create() {
     });
 
     try {
-      const client = await setUpIpfsClient();
-      const added = await client.add(data);
-      const url = `https://fund-meta.infura-ipfs.io/ipfs/${added.path}`;
+      const client = await createIpfsClient();
+      const result = await client.add(data);
+      const url = `https://fund-meta.infura-ipfs.io/ipfs/${result.path}`;
       postCrowdfund(goal, url);
     } catch (err) {
       console.log(err);
@@ -145,7 +157,9 @@ function Create() {
               className="input"
               onChange={onFileChange}
             />
-            {fileUrl && <img className="" width="350" src={fileUrl} />}
+            {fileUrl && (
+              <img className="" width="350" src={fileUrl as string} />
+            )}
             <button onClick={createCrowdfund} className="submit">
               Create Defi Crowdfund
             </button>

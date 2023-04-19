@@ -9,7 +9,7 @@ type props = {
 export default function CategoryList({ category, list }: props) {
 
   let filteredList = list.filter((crowdfund) => {
-    return crowdfund.category == category;
+    return crowdfund.category === category;
   });
 
   return (

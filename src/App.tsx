@@ -12,7 +12,6 @@ import { infuraProvider } from "wagmi/providers/infura";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
-  darkTheme,
   getDefaultWallets,
   lightTheme,
   RainbowKitProvider,

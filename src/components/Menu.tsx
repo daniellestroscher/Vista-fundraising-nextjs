@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import "./Menu.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faSlash } from "@fortawesome/free-solid-svg-icons";
 
 type props = {

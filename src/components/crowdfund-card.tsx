@@ -47,7 +47,7 @@ function CrowdfundCard({ crowdfund }: props) {
             }
           >
             <div className="image-box">
-              <img src={crowdfund.image} width={350} className="image" />
+              <img src={crowdfund.image} width={350} className="image" alt='Fundraiser' />
             </div>
             <section className="info">
               <a href={`/projects/${crowdfund.fundId}`}>
@@ -61,22 +61,22 @@ function CrowdfundCard({ crowdfund }: props) {
                     {crowdfund.name}
                   </h3>
                   {(crowdfund.category === "Children" && (
-                    <img src="charity.png" width={75} className="category" />
+                    <img src="charity.png" width={75} className="category" alt="category symbol" />
                   )) ||
                     (crowdfund.category === "Environment & Wildlife" && (
-                      <img src="charity.png" width={75} className="category" />
+                      <img src="charity.png" width={75} className="category" alt="category symbol" />
                     )) ||
                     (crowdfund.category === "Poverty" && (
-                      <img src="charity.png" width={75} className="category" />
+                      <img src="charity.png" width={75} className="category" alt="category symbol" />
                     )) ||
                     (crowdfund.category === "Research" && (
-                      <img src="charity.png" width={75} className="category" />
+                      <img src="charity.png" width={75} className="category" alt="category symbol" />
                     )) ||
                     (crowdfund.category === "Religious" && (
-                      <img src="charity.png" width={75} className="category" />
+                      <img src="charity.png" width={75} className="category" alt="category symbol" />
                     )) ||
                     (crowdfund.category === "Other" && (
-                      <img src="charity.png" width={75} className="category" />
+                      <img src="charity.png" width={75} className="category" alt="category symbol" />
                     ))}
                 </div>
               </a>
@@ -92,7 +92,7 @@ function CrowdfundCard({ crowdfund }: props) {
                     </strong>{" "}
                     Wei needed to reach our goal.
                   </p>
-                  {!goalReached && location.pathname != "/my-projects" ? (
+                  {!goalReached && location.pathname !== "/my-projects" ? (
                     <DonateBox crowdfund={crowdfund} />
                   ) : (
                     <div>
