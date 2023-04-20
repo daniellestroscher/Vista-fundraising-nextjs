@@ -12,7 +12,7 @@ export default function CategoryList({ category, list }: props) {
   });
 
   return (
-    <>
+    <div style={{padding: "10px"}}>
       {filteredList.length !== 0 && (
         <h4 className={styles.categoryTitle}>{category}</h4>
       )}
@@ -34,6 +34,6 @@ export default function CategoryList({ category, list }: props) {
             );
           })}
       </div>
-    </>
+    </div>
   );
 }
