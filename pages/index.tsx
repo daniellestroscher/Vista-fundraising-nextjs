@@ -18,16 +18,22 @@ import LandingPage from "./landing-page";
 // const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { isConnected, address } = useAccount();
 
   useEffect(() => {
+    setHasMounted(true);
     if (isConnected) {
       loadCrowdfunds();
     }
   }, [isConnected, address]);
+
+  if (!hasMounted) {
+    return null;
+  }
 
   async function loadCrowdfunds() {
     const allActiveFundraisers = (await readContract({
@@ -81,18 +87,16 @@ export default function Home() {
           </div>
         )}
         {crowdfundArr.length !== 0 && isConnected && (
-          <div>
-            <section>
-              <CategoryList
-                category={"Environment & Wildlife"}
-                list={searchableCrowdfunds}
-              />
-              <CategoryList category={"Children"} list={searchableCrowdfunds} />
-              <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
-              <CategoryList category={"Research"} list={searchableCrowdfunds} />
-              <CategoryList category={"Other"} list={searchableCrowdfunds} />
-            </section>
-          </div>
+          <section>
+            <CategoryList
+              category={"Environment & Wildlife"}
+              list={searchableCrowdfunds}
+            />
+            <CategoryList category={"Children"} list={searchableCrowdfunds} />
+            <CategoryList category={"Poverty"} list={searchableCrowdfunds} />
+            <CategoryList category={"Research"} list={searchableCrowdfunds} />
+            <CategoryList category={"Other"} list={searchableCrowdfunds} />
+          </section>
         )}
       </main>
     </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../styles/components/navBar.module.css";
 import Menu from "./menu";
 import SearchBar from "./searchBar";
@@ -14,12 +14,12 @@ type props = {
   setSearchQuery: undefined | ((arg: string) => void);
 };
 export default function NavBar({ searchQuery, setSearchQuery }: props) {
-  const [menuState, setMenuState] = useState(false);
+  const [menuState, setMenuState] = useState<boolean>(false);
   const router = useRouter();
   const { isConnected } = useAccount();
 
   return (
-    <div>
+    <>
       <section className={styles.appHeader}>
         <div className={styles.upperHeader}>
           <div className={styles.title}>
@@ -60,6 +60,6 @@ export default function NavBar({ searchQuery, setSearchQuery }: props) {
         </div>
       )}
       <Menu setMenuState={setMenuState} menuState={menuState} />
-    </div>
+    </>
   );
 }

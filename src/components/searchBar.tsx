@@ -27,9 +27,6 @@ export default function SearchBar({ searchQuery, setSearchQuery }: Props) {
             className={`${styles.searchInput} ${
               showInput ? styles.slideSearchInput : ""
             }`}
-            // className={
-            //   showInput ? "search-input slide-search-input" : "search-input"
-            // }
             value={searchQuery}
             onInput={(e) => setSearchQuery(e.currentTarget.value)}
             type="text"

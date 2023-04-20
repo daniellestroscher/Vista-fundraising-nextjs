@@ -56,9 +56,9 @@ function CrowdfundCard({ crowdfund }: props) {
               <Link
                 href="/projects/[id]"
                 as={`/projects/${crowdfund.fundId}`}
-                onClick={() =>
-                  window.location.replace(`/projects/${crowdfund.fundId}`)
-                }
+                // onClick={() =>
+                //   window.location.replace(`/projects/${crowdfund.fundId}`)
+                // }
                 className={styles.link}
               >
                 <div className={styles.cardHeader}>

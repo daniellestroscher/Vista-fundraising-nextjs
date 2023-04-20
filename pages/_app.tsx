@@ -11,8 +11,7 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { w3mProvider } from "@web3modal/ethereum";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, useAccount, WagmiConfig } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli, localhost } from "wagmi/chains";
 
 const chainList = [goerli, polygon, localhost, arbitrum, mainnet];
