@@ -39,31 +39,31 @@ function CrowdfundCard({ crowdfund }: props) {
   return (
     <>
       {
-        <div className="container">
+        <div className={styles.container}>
           <div
-            className={
-              !goalReached ? "crowdfund-item" : "crowdfund-item-complete"
-            }
+            className={`${styles.crowdfundItem}
+              ${goalReached ? styles.crowdfundItemComplete : ""}`}
           >
-            <div className="image-box">
+            <div className={styles.imageBox}>
               <img
                 src={crowdfund.image}
                 width={350}
-                className="image"
+                className={styles.image}
                 alt="Fundraiser"
               />
             </div>
-            <section className="info">
+            <section className={styles.info}>
               <Link
                 href="/projects/[id]"
                 as={`/projects/${crowdfund.fundId}`}
                 onClick={() =>
                   window.location.replace(`/projects/${crowdfund.fundId}`)
                 }
+                className={styles.link}
               >
-                <div className="card-header">
+                <div className={styles.cardHeader}>
                   <h3
-                    className="fund-name"
+                    className={styles.fundName}
                     style={{
                       color: goalReached ? "rgb(9, 103, 18)" : "inherit",
                     }}
@@ -74,7 +74,7 @@ function CrowdfundCard({ crowdfund }: props) {
                     <img
                       src="charity.png"
                       width={75}
-                      className="category"
+                      className={styles.category}
                       alt="category symbol"
                     />
                   )) ||
@@ -82,7 +82,7 @@ function CrowdfundCard({ crowdfund }: props) {
                       <img
                         src="charity.png"
                         width={75}
-                        className="category"
+                        className={styles.category}
                         alt="category symbol"
                       />
                     )) ||
@@ -90,7 +90,7 @@ function CrowdfundCard({ crowdfund }: props) {
                       <img
                         src="charity.png"
                         width={75}
-                        className="category"
+                        className={styles.category}
                         alt="category symbol"
                       />
                     )) ||
@@ -98,7 +98,7 @@ function CrowdfundCard({ crowdfund }: props) {
                       <img
                         src="charity.png"
                         width={75}
-                        className="category"
+                        className={styles.category}
                         alt="category symbol"
                       />
                     )) ||
@@ -106,7 +106,7 @@ function CrowdfundCard({ crowdfund }: props) {
                       <img
                         src="charity.png"
                         width={75}
-                        className="category"
+                        className={styles.category}
                         alt="category symbol"
                       />
                     )) ||
@@ -114,18 +114,18 @@ function CrowdfundCard({ crowdfund }: props) {
                       <img
                         src="charity.png"
                         width={75}
-                        className="category"
+                        className={styles.category}
                         alt="category symbol"
                       />
                     ))}
                 </div>
               </Link>
 
-              <div className="box">
-                <p className="desc">{crowdfund.descriptionShort}</p>
+              <div className={styles.box}>
+                <p className={styles.desc}>{crowdfund.descriptionShort}</p>
 
-                <div className="status">
-                  <p className="progress">
+                <div className={styles.status}>
+                  <p className={styles.progress}>
                     <strong>{String(crowdfund.goal - totalRaised)}</strong> Wei
                     needed to reach our goal.
                   </p>
@@ -133,7 +133,10 @@ function CrowdfundCard({ crowdfund }: props) {
                     <DonateBox crowdfund={crowdfund} />
                   ) : (
                     <div>
-                      <button onClick={removeCrowdfund} className="donate">
+                      <button
+                        onClick={removeCrowdfund}
+                        className={styles.donate}
+                      >
                         Remove
                       </button>
                     </div>

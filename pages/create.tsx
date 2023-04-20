@@ -13,8 +13,8 @@ import { Buffer } from "buffer";
 import { useContract, useSigner, useAccount } from "wagmi";
 //window.Buffer = window.Buffer || Buffer;
 
-const infuraProjectId = process.env.REACT_APP_INFURA_PROJECT_ID;
-const apiKeySecret = process.env.REACT_APP_INFURA_SECRET;
+const infuraProjectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
+const apiKeySecret = process.env.NEXT_PUBLIC_INFURA_SECRET;
 
 async function createIpfsClient() {
   const auth =

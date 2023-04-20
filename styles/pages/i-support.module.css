@@ -1,2 +1,31 @@
 /* see Discover.css for .page and .page-heading */
 /* see MyProjects.css for .crowdfund-grid and media query */
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pageHeading {
+  display: flex;
+  justify-content: center;
+  border: 2px solid rgb(173, 212, 181);
+  border-radius: 50px;
+  width: 600px;
+  padding: 10px;
+  margin-top: 40px;
+}
+
+.crowdfundGrid {
+  display: grid;
+  gap: -5px;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px;
+}
+
+@media only screen and (max-width: 1025px) {
+  .crowdfundGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -71,15 +71,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!isConnected && (
-          <>
-            <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-            <LandingPage />
-          </>
-        )}
+        <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        {!isConnected && <LandingPage />}
         {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
           <div className={styles.page}>
-            <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <p className={styles.pageHeading}>
               No Crowdfunds in this marketplace.
             </p>

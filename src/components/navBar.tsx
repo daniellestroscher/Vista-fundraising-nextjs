@@ -19,7 +19,7 @@ export default function NavBar({ searchQuery, setSearchQuery }: props) {
   const { isConnected } = useAccount();
 
   return (
-    <>
+    <div>
       <section className={styles.appHeader}>
         <div className={styles.upperHeader}>
           <div className={styles.title}>
@@ -60,6 +60,6 @@ export default function NavBar({ searchQuery, setSearchQuery }: props) {
         </div>
       )}
       <Menu setMenuState={setMenuState} menuState={menuState} />
-    </>
+    </div>
   );
 }

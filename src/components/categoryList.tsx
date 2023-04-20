@@ -1,6 +1,6 @@
 import styles from "../../styles/components/categoryList.module.css";
 import { CrowdfundWithMeta } from "../types";
-//import CrowdfundCard from "./crowdfund-card";
+import CrowdfundCard from "./crowdfundCard";
 
 type props = {
   category: string;
@@ -29,8 +29,7 @@ export default function CategoryList({ category, list }: props) {
           filteredList.map((item, i) => {
             return (
               <div key={i}>
-                im a card
-                {/* <CrowdfundCard crowdfund={item} /> */}
+                <CrowdfundCard crowdfund={item} />
               </div>
             );
           })}
