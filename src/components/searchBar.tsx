@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "../../styles/components/searchBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
@@ -16,11 +16,14 @@ export default function SearchBar({ searchQuery, setSearchQuery }: Props) {
       className={styles.searchContainer}
       onMouseEnter={() => setShowInput(true)}
       onMouseLeave={() => setShowInput(false)}
+      role="search"
+      data-testid="search-bar-box"
     >
       <div className={styles.searchBox}>
         <FontAwesomeIcon
           icon={faMagnifyingGlass as IconProp}
           className={styles.searchIcon}
+          data-testid="mag-glass"
         />
         {
           <input

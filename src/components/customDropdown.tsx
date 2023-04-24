@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "../../styles/pages/create.module.css";
 type props = {
   setFormInput: React.Dispatch<
@@ -32,7 +33,7 @@ export default function DropdownMenu({ setFormInput, formInput }: props) {
         <option value="default" disabled>
           Select Category
         </option>
-        <option >Children</option>
+        <option>Children</option>
         <option>Environment & Wildlife</option>
         <option>Poverty</option>
         <option>Research</option>

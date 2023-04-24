@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "../../styles/components/donateBox.module.css";
 import { prepareSendTransaction, sendTransaction } from "@wagmi/core";
 import { CrowdfundWithMeta } from "../types";
@@ -18,11 +18,12 @@ export default function DonateBox({ crowdfund }: props) {
   }
 
   return (
-    <div>
+    <div role="donate">
       <input
         className={styles.donateBox}
         type="number"
         onChange={(e) => setContribution(Number(e.target.value))}
+        data-testid="donate-input"
       />
       <button onClick={donateToCause} className={styles.donate}>
         Donate

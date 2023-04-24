@@ -1,3 +1,4 @@
+import React from "react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -30,6 +31,7 @@ async function createIpfsClient() {
       authorization: auth,
     },
   }) as IPFSHTTPClient;
+  console.log(client, 'client');
   return client;
 }
 
@@ -109,11 +111,11 @@ function Create() {
   async function postCrowdfund(goal: number, url: string) {
     let transaction = await marketContract.createCrowdfund(goal, url);
     await transaction.wait();
-    router.push('/')
+    router.push("/");
   }
 
   return (
-    <>
+    <div role="create-component">
       <NavBar searchQuery={""} setSearchQuery={undefined} />
       {isConnected && (
         <div className={styles.page}>
@@ -158,16 +160,14 @@ function Create() {
               className={styles.input}
               onChange={onFileChange}
             />
-            {fileUrl && (
-              <img width="350" src={fileUrl as string} />
-            )}
+            {fileUrl && <img width="350" src={fileUrl as string} />}
             <button onClick={createCrowdfund} className={styles.submit}>
               Create Defi Crowdfund
             </button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

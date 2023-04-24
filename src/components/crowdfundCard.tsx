@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CrowdfundWithMeta } from "../types";
 import styles from "../../styles/components/crowdfundCard.module.css";
 import DonateBox from "./donateBox";
@@ -11,7 +11,7 @@ import Link from "next/link";
 type props = {
   crowdfund: CrowdfundWithMeta;
 };
-function CrowdfundCard({ crowdfund }: props) {
+export default function CrowdfundCard({ crowdfund }: props) {
   const [totalRaised, setTotalRaised] = useState<number>(0);
   const router = useRouter();
 
@@ -33,13 +33,13 @@ function CrowdfundCard({ crowdfund }: props) {
   }, [raised, goalReached]);
 
   function removeCrowdfund() {
-    alert("TODO: create remove function.");
+    console.log("TODO: create remove function.");
   }
 
   return (
     <>
       {
-        <div className={styles.container}>
+        <div className={styles.container} role="article">
           <div
             className={`${styles.crowdfundItem}
               ${goalReached ? styles.crowdfundItemComplete : ""}`}
@@ -150,5 +150,3 @@ function CrowdfundCard({ crowdfund }: props) {
     </>
   );
 }
-
-export default CrowdfundCard;

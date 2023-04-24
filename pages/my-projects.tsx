@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/pages/my-projects.module.css";
 import axios from "axios";
 import { MarketAbi, MarketAddress } from "../config";
@@ -57,7 +57,9 @@ function MyProjects() {
       <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
         <div className={styles.page}>
-          <p className={styles.pageHeading}>You haven't created any crowdfunds.</p>
+          <p className={styles.pageHeading}>
+            You haven't created any crowdfunds.
+          </p>
         </div>
       )}
       {crowdfundArr.length !== 0 && (

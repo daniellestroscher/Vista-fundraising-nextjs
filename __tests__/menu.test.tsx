@@ -1,11 +1,11 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"; // Optional, for additional testing utilities
 
 import Menu from "../src/components/menu";
-import { faSlash, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 describe("Menu", function () {
+
   test("renders the menu when prop is true", () => {
     let menuState = true;
     const setMenuState = jest.fn((newState) => {
@@ -29,7 +29,6 @@ describe("Menu", function () {
 
     // // Assert that the close icon has the correct icon prop
     const closeIcon = screen.getByTestId("close-icon");
-    // expect(closeIcon).toHaveAttribute("icon", faSlash as IconDefinition);
 
     // Simulate click on close icon
     fireEvent.click(closeIcon);

@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "../../styles/components/categoryList.module.css";
 import { CrowdfundWithMeta } from "../types";
 import CrowdfundCard from "./crowdfundCard";
@@ -12,7 +13,7 @@ export default function CategoryList({ category, list }: props) {
   });
 
   return (
-    <div style={{padding: "10px"}}>
+    <div style={{ padding: "10px" }}>
       {filteredList.length !== 0 && (
         <h4 className={styles.categoryTitle}>{category}</h4>
       )}
@@ -24,6 +25,7 @@ export default function CategoryList({ category, list }: props) {
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
+        role='list'
       >
         {filteredList.length !== 0 &&
           filteredList.map((item, i) => {

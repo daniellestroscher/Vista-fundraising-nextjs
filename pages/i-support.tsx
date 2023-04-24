@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/pages/i-support.module.css";
 
 import CrowdfundCard from "../src/components/crowdfundCard";

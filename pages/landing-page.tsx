@@ -1,8 +1,9 @@
+import React from "react";
 import styles from "../styles/pages/landing-page.module.css";
 
 export default function LandingPage() {
   return (
-    <div className={styles.mainContainer}>
+    <div className={styles.mainContainer} role="landing-page">
       <section className={styles.infoBox}>
         <p className={styles.introParagraph}>
           Hey! Welcome to Vista, we're so glad you're here! <br />

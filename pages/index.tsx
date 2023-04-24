@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import "@testing-library/jest-dom/extend-expect";
 import Head from "next/head";
 import styles from "../styles/pages/discover.module.css";
 import NavBar from "../src/components/navBar";
@@ -14,6 +15,9 @@ import { readContract } from "@wagmi/core";
 
 import Image from "next/image";
 import LandingPage from "./landing-page";
+//import { act } from "react-dom/test-utils";
+import { act } from "@testing-library/react";
+
 // import { Inter } from "@next/font/google";
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -42,7 +46,6 @@ export default function Home() {
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
 
-    console.log(allActiveFundraisers, "all active");
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
         const meta = await axios.get(crowdfund.metaUrl);
@@ -61,13 +64,15 @@ export default function Home() {
       })
     )) as CrowdfundWithMeta[];
 
-    setCrowdfundArr(crowdfundList);
-    setLoadingState("loaded");
+    act(() => {
+      /* in function for testing purposes */
+      setCrowdfundArr(crowdfundList);
+      setLoadingState("loaded");
+    });
   }
 
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
-  console.log(loadingState, !crowdfundArr.length, isConnected);
   return (
     <>
       <Head>

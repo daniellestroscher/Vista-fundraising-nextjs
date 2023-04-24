@@ -11,7 +11,10 @@ type props = {
 };
 export default function Menu({ setMenuState, menuState }: props) {
   return (
-    <nav className={`${styles.nav} ${menuState ? "" : styles.slide}`}>
+    <nav
+      className={`${styles.nav} ${menuState ? "" : styles.slide}`}
+      role="navigation"
+    >
       <FontAwesomeIcon
         icon={faSlash}
         onClick={() => {

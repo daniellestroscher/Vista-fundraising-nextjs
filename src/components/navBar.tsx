@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../../styles/components/navBar.module.css";
 import Menu from "./menu";
 import SearchBar from "./searchBar";
@@ -44,7 +44,7 @@ export default function NavBar({ searchQuery, setSearchQuery }: props) {
         <></>
       ) : (
         <div className={styles.navContainer}>
-          <section className={styles.navigationBox}>
+          <section className={styles.navigationBox} role="search-menu-box">
             {router.pathname !== "/create" && (
               <SearchBar
                 searchQuery={searchQuery}
@@ -55,6 +55,7 @@ export default function NavBar({ searchQuery, setSearchQuery }: props) {
               icon={faBars}
               onClick={() => setMenuState(!menuState)}
               className={styles.menuBars}
+              data-testid="menu-button"
             />
           </section>
         </div>
