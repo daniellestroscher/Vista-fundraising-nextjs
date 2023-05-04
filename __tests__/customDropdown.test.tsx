@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import DropdownMenu from "../src/components/customDropdown";
 
 describe("DropdownMenu", () => {
-  it("should set the category value when an option is selected", () => {
+  test("should set the category value when an option is selected", () => {
     const setFormInputMock = jest.fn();
     const formInputMock = {
       name: "Test",

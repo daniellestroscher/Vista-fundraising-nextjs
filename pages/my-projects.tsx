@@ -58,7 +58,7 @@ function MyProjects() {
       {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
         <div className={styles.page}>
           <p className={styles.pageHeading}>
-            You haven't created any crowdfunds.
+            You haven't created any fundraisers.
           </p>
         </div>
       )}

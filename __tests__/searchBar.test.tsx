@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import SearchBar from "../src/components/searchBar";
@@ -22,10 +22,6 @@ describe("Search Bar", function () {
   });
 
   test("updates the search query when input is entered", () => {
-    // const setShowInput = jest.fn();
-    // const useStateMock = jest.fn().mockReturnValue([false, setShowInput]);
-    // jest.spyOn(React, "useState").mockImplementation(useStateMock);
-
     const { getByPlaceholderText } = render(
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
     );
@@ -48,25 +44,19 @@ describe("Search Bar", function () {
   });
 
   test("hides the search input when the mouse leaves the container", async () => {
-    const { getByTestId, getByPlaceholderText, queryByPlaceholderText, debug } =
-      await waitFor(() =>
-        render(
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-        )
-      );
-    // const container = await waitFor(
-    //   () => getByPlaceholderText("Search by name or category").parentNode
-    // );
-    //TODO: GET CSS TO RESOLVE IN TEST SUITE
+    const { getByTestId } = await waitFor(() =>
+      render(
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      )
+    );
+
     const container = getByTestId("search-bar-box");
     const input = screen.getByPlaceholderText("Search by name or category");
 
-    // await waitFor(() => fireEvent.mouseEnter(container as ParentNode));
-    // expect(expect(input.classList.contains("slideSearchInput")).toBe(true));
-    // await waitFor(() => fireEvent.mouseLeave(container as ParentNode));
-    // expect(expect(input.classList.contains("slideSearchInput")).toBe(false));
+    await waitFor(() => fireEvent.mouseEnter(container as ParentNode));
+    expect(expect(input.classList.contains("slideSearchInput")).toBe(true));
+
+    await waitFor(() => fireEvent.mouseLeave(container as ParentNode));
+    expect(expect(input.classList.contains("slideSearchInput")).toBe(false));
   });
 });

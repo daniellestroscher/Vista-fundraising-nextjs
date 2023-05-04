@@ -1,8 +1,6 @@
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-
+import { render, screen } from "@testing-library/react";
 import CrowdfundCard from "../src/components/crowdfundCard";
-
 import { useRouter } from "next/router";
 
 const mockCrowdfund = {
@@ -62,19 +60,4 @@ describe("CrowdfundCard", function () {
     );
     expect(screen.getByText("Donate")).toBeInTheDocument();
   });
-
-  // test("calls the remove function when the remove button is clicked", async () => {
-  //   (useRouter as jest.Mock).mockImplementation(() => ({
-  //     pathname: "/my-projects",
-  //   }));
-  //   const myFunctionMock = jest.spyOn(module, "removeCrowdfund");
-  //   console.log(myFunctionMock)
-  //   const { getByText } = render(
-  //     <CrowdfundCard crowdfund={{ ...mockCrowdfund, goalReached: true }} />
-  //   );
-  //   const removeButton = getByText("Remove");
-
-  //   await waitFor(() => fireEvent.click(removeButton));
-  //   expect(myFunctionMock).toHaveBeenCalled();
-  // });
 });

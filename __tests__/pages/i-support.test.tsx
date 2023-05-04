@@ -9,7 +9,6 @@ import {
 
 import ISupport from "../../pages/i-support";
 import { readContract } from "@wagmi/core";
-import { useAccount } from "wagmi";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn().mockImplementation(() => ({

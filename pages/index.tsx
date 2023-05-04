@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "@testing-library/jest-dom/extend-expect";
 import Head from "next/head";
 import styles from "../styles/pages/discover.module.css";
 import NavBar from "../src/components/navBar";
@@ -13,9 +12,7 @@ import axios from "axios";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 
-import Image from "next/image";
 import LandingPage from "./landing-page";
-//import { act } from "react-dom/test-utils";
 import { act } from "@testing-library/react";
 
 // import { Inter } from "@next/font/google";
@@ -87,7 +84,7 @@ export default function Home() {
         {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
           <div className={styles.page}>
             <p className={styles.pageHeading}>
-              No Crowdfunds in this marketplace.
+              No fundraisers in this marketplace.
             </p>
           </div>
         )}

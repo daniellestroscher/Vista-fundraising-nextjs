@@ -32,6 +32,24 @@ export default function CrowdfundCard({ crowdfund }: props) {
     setTotalRaised(Number(raised));
   }, [raised, goalReached]);
 
+  //set proper symbol for card category.
+  let symbolSrc = "";
+  if (crowdfund.category === "Children") {
+    symbolSrc = "charity.png";
+  } else if (crowdfund.category === "Environment & Wildlife") {
+    symbolSrc = "charity.png";
+  } else if (crowdfund.category === "Poverty") {
+    symbolSrc = "charity.png";
+  } else if (crowdfund.category === "Research") {
+    symbolSrc = "charity.png";
+  } else if (crowdfund.category === "Religious") {
+    symbolSrc = "charity.png";
+  } else if (crowdfund.category === "Other") {
+    symbolSrc = "charity.png";
+  } else {
+    symbolSrc = "charity.png";
+  }
+
   function removeCrowdfund() {
     console.log("TODO: create remove function.");
   }
@@ -56,9 +74,6 @@ export default function CrowdfundCard({ crowdfund }: props) {
               <Link
                 href="/projects/[id]"
                 as={`/projects/${crowdfund.fundId}`}
-                // onClick={() =>
-                //   window.location.replace(`/projects/${crowdfund.fundId}`)
-                // }
                 className={styles.link}
               >
                 <div className={styles.cardHeader}>
@@ -70,54 +85,12 @@ export default function CrowdfundCard({ crowdfund }: props) {
                   >
                     {crowdfund.name}
                   </h3>
-                  {(crowdfund.category === "Children" && (
-                    <img
-                      src="charity.png"
-                      width={75}
-                      className={styles.category}
-                      alt="category symbol"
-                    />
-                  )) ||
-                    (crowdfund.category === "Environment & Wildlife" && (
-                      <img
-                        src="charity.png"
-                        width={75}
-                        className={styles.category}
-                        alt="category symbol"
-                      />
-                    )) ||
-                    (crowdfund.category === "Poverty" && (
-                      <img
-                        src="charity.png"
-                        width={75}
-                        className={styles.category}
-                        alt="category symbol"
-                      />
-                    )) ||
-                    (crowdfund.category === "Research" && (
-                      <img
-                        src="charity.png"
-                        width={75}
-                        className={styles.category}
-                        alt="category symbol"
-                      />
-                    )) ||
-                    (crowdfund.category === "Religious" && (
-                      <img
-                        src="charity.png"
-                        width={75}
-                        className={styles.category}
-                        alt="category symbol"
-                      />
-                    )) ||
-                    (crowdfund.category === "Other" && (
-                      <img
-                        src="charity.png"
-                        width={75}
-                        className={styles.category}
-                        alt="category symbol"
-                      />
-                    ))}
+                  <img
+                    src={symbolSrc}
+                    width={75}
+                    className={styles.category}
+                    alt="category symbol"
+                  />
                 </div>
               </Link>
 
@@ -135,7 +108,7 @@ export default function CrowdfundCard({ crowdfund }: props) {
                     <div>
                       <button
                         onClick={removeCrowdfund}
-                        className={styles.donate}
+                        className={styles.remove}
                       >
                         Remove
                       </button>

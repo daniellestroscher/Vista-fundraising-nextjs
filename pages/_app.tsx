@@ -15,14 +15,14 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli, localhost } from "wagmi/chains";
 
 const chainList = [goerli, polygon, localhost, arbitrum, mainnet];
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider } = configureChains(chainList, [
     w3mProvider({ projectId }),
     publicProvider({ priority: 1 }),
     infuraProvider({
-      apiKey: process.env.REACT_APP_INFURA_SECRET as string,
+      apiKey: process.env.NEXT_PUBLIC_INFURA_SECRET as string,
       priority: 1,
     }),
   ]);

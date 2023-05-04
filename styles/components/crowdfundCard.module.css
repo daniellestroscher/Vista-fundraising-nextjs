@@ -84,3 +84,13 @@
 .link:hover {
   text-decoration: none;
 }
+
+.remove {
+  border: 3px solid rgb(173, 212, 181);
+  background-color: rgb(84, 127, 234);
+  border-radius: 50px;
+  padding: 10px 20px 10px 20px;
+  color: white;
+  margin: 3px;
+  cursor: pointer;
+}

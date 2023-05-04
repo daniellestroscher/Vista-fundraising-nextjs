@@ -1,6 +1,5 @@
 import React from "react";
-import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"; // Optional, for additional testing utilities
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import Menu from "../src/components/menu";
 

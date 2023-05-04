@@ -26,7 +26,6 @@ jest.mock("next/router", () => ({
 }));
 
 describe("Nav Bar", function () {
-
   test("contains the expected elements", () => {
     render(<NavBar searchQuery={""} setSearchQuery={undefined} />);
     expect(screen.getByText("Vista Fundraising,")).toBeInTheDocument();
@@ -37,10 +36,6 @@ describe("Nav Bar", function () {
   });
 
   test("does not display menu/search button until user connects wallet", () => {
-    // const setMenuState = jest.fn();
-    // const useStateMock = jest.fn().mockReturnValue([false, setMenuState]);
-    // jest.spyOn(React, "useState").mockImplementation(useStateMock);
-
     (useAccount as jest.Mock).mockImplementation(() => ({
       isConnected: false,
     }));
@@ -70,15 +65,15 @@ describe("Nav Bar", function () {
       pathname: "/",
     }));
 
-    render(<NavBar searchQuery={""} setSearchQuery={undefined} />);
+    const { debug } = render(
+      <NavBar searchQuery={""} setSearchQuery={undefined} />
+    );
 
     const menuButton = await waitFor(() => screen.getByTestId("menu-button"));
     const menu = await waitFor(() => screen.getByRole("navigation"));
 
-    //TODO: GET CSS TO RESOLVE IN TEST SUITE
-    // await waitFor(() => fireEvent.click(menuButton));
-    // expect(menu.classList.contains("slide")).toBe(true);
-    // await waitFor(() => fireEvent.click(menuButton));
-    // expect(menu.classList.contains("slide")).toBe(false);
+    expect(menu.classList.contains("slide")).toBe(true); //menu is closed.
+    await waitFor(() => fireEvent.click(menuButton));
+    expect(menu.classList.contains("slide")).toBe(false); //menu is open.
   });
 });

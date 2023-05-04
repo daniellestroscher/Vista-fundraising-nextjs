@@ -6,11 +6,8 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import axios from "axios";
 import MyProjects from "../../pages/my-projects";
 import { readContract } from "@wagmi/core";
-import { useAccount } from "wagmi";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn().mockImplementation(() => ({

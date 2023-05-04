@@ -59,6 +59,7 @@ function ISupport() {
   }
 
   async function filterListISupport(crowdfundList: CrowdfundWithMeta[]) {
+    let donated = [] as CrowdfundWithMeta[];
     for (let i = 0; i < crowdfundList.length; i++) {
       //filter out all except ones that signer has contributed to.
       const donatedToContract = (await readContract({
@@ -69,12 +70,11 @@ function ISupport() {
         overrides: { from: address },
       })) as Crowdfund[];
 
-      let donated = [] as CrowdfundWithMeta[];
       if (donatedToContract) {
         donated.push(crowdfundList[i]);
       }
-      return donated;
     }
+    return donated;
   }
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);
 
@@ -83,7 +83,9 @@ function ISupport() {
       <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {loadingState === "loaded" && !crowdfundArr.length && isConnected && (
         <div className={styles.page}>
-          <p className={styles.pageHeading}>You don't support any active projects.</p>
+          <p className={styles.pageHeading}>
+            You don't support any active projects.
+          </p>
         </div>
       )}
       {crowdfundArr.length !== 0 && isConnected && (

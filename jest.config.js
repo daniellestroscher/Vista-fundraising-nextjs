@@ -16,7 +16,8 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    "\\.css$": "<rootDir>/__mocks__/styleMock.js", // Map CSS file imports to an empty module
+    //"\\.css$": "<rootDir>/__mocks__/styleMock.js", // Map CSS file imports to an empty module
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^(\\.\\.?\\/.+)\\.jsx?$": "$1",
   },
   testMatch: ["**/__tests__/**/*.test.ts?(x)"],
