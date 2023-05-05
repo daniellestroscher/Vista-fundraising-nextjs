@@ -16,7 +16,6 @@ type props = {
 };
 export default function DonateBox({ crowdfund }: props) {
   const [contribution, setContribution] = useState<number | undefined>(0);
-  const { address } = useAccount();
 
   async function donateToCause() {
     const config = await prepareSendTransaction({

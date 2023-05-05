@@ -1,4 +1,4 @@
-export const MarketAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+export const MarketAddress = "0xb84C2084D5b71Aa56F05dB6e7Cb203E80f6039d0";
 export const MarketAbi = [
   {
     anonymous: false,
@@ -300,6 +300,19 @@ export const MarketAbi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [],
+    name: "version",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 // CROWDFUND CONTRACT //
@@ -476,19 +489,6 @@ export const CrowdfundAbi = [
         internalType: "uint256",
         name: "",
         type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "version",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
       },
     ],
     stateMutability: "view",

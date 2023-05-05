@@ -6,12 +6,9 @@ import styles from "../../styles/pages/project-info.module.css";
 import { Crowdfund, CrowdfundWithMeta } from "../../src/types";
 import { CrowdfundAbi, MarketAbi, MarketAddress } from "../../config";
 import axios from "axios";
-import {
-  useContractRead,
-  useAccount,
-  useBalance,
-} from "wagmi";
+import { useContractRead, useAccount, useBalance } from "wagmi";
 import { readContract, prepareWriteContract, writeContract } from "@wagmi/core";
+import NavBar from "../../src/components/navBar";
 
 export default function ProjectInfo() {
   const router = useRouter();
@@ -84,40 +81,43 @@ export default function ProjectInfo() {
   return (
     <>
       {crowdfund && (
-        <section className={styles.mainContainer}>
-          <div
-            style={{ backgroundImage: `url(${crowdfund.image})` }}
-            className={styles.header}
-          >
-            <h2 className={styles.pageTitle}>{crowdfund.name}</h2>
-            {address === crowdfund.owner ? (
-              <div className={styles.contentContainer}>
-                <p>Current Contract Balance: {Number(data?.value)} Wei</p>
-                <button className={styles.button} onClick={withdrawFunds}>
-                  Withdraw
-                </button>
-                {/* TODO: maybe add change goal feature */}
-              </div>
-            ) : (
-              <div className={styles.contentContainer}>
-                <DonateBox crowdfund={crowdfund} />
-              </div>
-            )}
-          </div>
-          <section className={styles.descriptionBox}>
-            <p className={styles.descriptionShort}>
-              {crowdfund.descriptionShort}
-            </p>
-            <div></div>
-            <p className={styles.descriptionLong}>
-              {crowdfund.descriptionLong}
-            </p>
+        <>
+          <NavBar searchQuery={""} setSearchQuery={undefined} />
+          <section className={styles.mainContainer}>
+            <div
+              style={{ backgroundImage: `url(${crowdfund.image})` }}
+              className={styles.header}
+            >
+              <h2 className={styles.pageTitle}>{crowdfund.name}</h2>
+              {address === crowdfund.owner ? (
+                <div className={styles.contentContainer}>
+                  <p>Current Contract Balance: {Number(data?.value)} Wei</p>
+                  <button className={styles.button} onClick={withdrawFunds}>
+                    Withdraw
+                  </button>
+                  {/* TODO: maybe add change goal feature */}
+                </div>
+              ) : (
+                <div className={styles.contentContainer}>
+                  <DonateBox crowdfund={crowdfund} />
+                </div>
+              )}
+            </div>
+            <section className={styles.descriptionBox}>
+              <p className={styles.descriptionShort}>
+                {crowdfund.descriptionShort}
+              </p>
+              <div></div>
+              <p className={styles.descriptionLong}>
+                {crowdfund.descriptionLong}
+              </p>
+            </section>
+            <section className={styles.goalStatsBox}>
+              <h4>Raised: {totalRaised as number} Wei</h4>
+              <h4>Goal: {crowdfund.goal as number} Wei</h4>
+            </section>
           </section>
-          <section className={styles.goalStatsBox}>
-            <h4>Raised: {totalRaised as number} Wei</h4>
-            <h4>Goal: {crowdfund.goal as number} Wei</h4>
-          </section>
-        </section>
+        </>
       )}
     </>
   );

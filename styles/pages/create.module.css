@@ -5,41 +5,48 @@
 .form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  /* gap: 20px; */
+  align-items: center;
   width: 30rem;
   margin: 25px;
 }
 .input {
   background-color: #eaf2fa;
   color: gray;
-  /* margin-top: 10px; */
-  height: 50px;
-  padding: 10px;
+  min-height: 60px;
+  min-width: 500px;
+  margin: 10px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   border: none;
-  border-bottom: 2px solid rgb(70, 80, 222);
+  border-bottom: 1.5px solid rgb(70, 80, 222);
 }
 .input:focus {
   outline: none;
 }
+
 .textarea {
+  line-height: 4;
   min-height: 60px;
 }
 
 .input::file-selector-button {
   border: none;
   border-radius: 50px;
-  padding: 8px;
+  padding: 10px;
+  margin-top: 8px;
   background-color: rgb(70, 80, 222);
   color: white;
   width: 100px;
   cursor: pointer;
 }
 
+.displayPhoto {
+  border-radius: 10px;
+}
+
 .submit {
+  min-width: 500px;
   border: none;
   border-radius: 25px;
   padding: 15px;
@@ -51,7 +58,6 @@
     #f2cefc 0%,
     #ac9cf6 50%,
     rgb(186, 228, 195) 100%
-    /* #abeed9 100% */
   );
 }
 .submit:hover {

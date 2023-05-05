@@ -8,12 +8,13 @@ import DropdownMenu from "../src/components/customDropdown";
 
 import { create, IPFSHTTPClient } from "ipfs-http-client";
 import { MarketAddress, MarketAbi } from "../config";
+import Web3Modal from "web3modal";
+import Market from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
 import { ethers } from "ethers";
 
 import { Buffer } from "buffer";
 import { useContract, useSigner, useAccount } from "wagmi";
 import { prepareWriteContract, writeContract } from "@wagmi/core";
-//window.Buffer = window.Buffer || Buffer;
 
 const infuraProjectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
 const apiKeySecret = process.env.NEXT_PUBLIC_INFURA_SECRET;
@@ -22,7 +23,6 @@ async function createIpfsClient() {
   const auth =
     "Basic " +
     Buffer.from(infuraProjectId + ":" + apiKeySecret).toString("base64");
-  console.log(auth, "this is the auth string");
 
   const client = create({
     host: "ipfs.infura.io",
@@ -32,7 +32,6 @@ async function createIpfsClient() {
       authorization: auth,
     },
   }) as IPFSHTTPClient;
-  console.log(client, "client");
   return client;
 }
 
@@ -48,13 +47,12 @@ function Create() {
   });
   const router = useRouter();
   const { isConnected } = useAccount();
-  const { data: signer } = useSigner();
-
-  const marketContract = useContract({
-    address: MarketAddress,
-    abi: MarketAbi,
-    signerOrProvider: signer,
-  }) as ethers.Contract;
+  //const { data: signer } = useSigner();
+  // const marketContract = useContract({
+  //   address: MarketAddress,
+  //   abi: MarketAbi,
+  //   signerOrProvider: signer,
+  // }) as ethers.Contract;
 
   useEffect(() => {
     if (file) {
@@ -103,27 +101,39 @@ function Create() {
       const client = await createIpfsClient();
       const result = await client.add(data);
       const url = `https://fund-meta.infura-ipfs.io/ipfs/${result.path}`;
-      console.log('everything before posting is okay.');
       postCrowdfund(goal, url);
     } catch (err) {
-      console.log(err);
+      console.log(err, "Error creating IPFS client");
     }
   }
 
   async function postCrowdfund(goal: number, url: string) {
-    let config = await prepareWriteContract({
-      address: MarketAddress,
-      abi: MarketAbi,
-      functionName: "createCrowdfund",
-      args: [goal, url],
-    });
-    const { hash } = await writeContract(config);
+    try {
+      // const web3Modal = new Web3Modal();
+      // const connection = await web3Modal.connect();
+      // const provider = new ethers.providers.Web3Provider(connection);
+      // const signer = provider.getSigner();
 
-    if (hash) router.push("/");
-
-    // marketContract.createCrowdfund(goal, url);
-    // await transaction.wait();
-    // router.push("/");
+      // const marketContract = new ethers.Contract(
+      //   MarketAddress,
+      //   Market.abi,
+      //   signer
+      // );
+      //const created = await marketContract.createCrowdfund(goal, url);
+      let config = await prepareWriteContract({
+        address: MarketAddress,
+        abi: MarketAbi,
+        functionName: "createCrowdfund",
+        args: [goal, url],
+      });
+      const { hash } = await writeContract(config);
+      if (hash) router.push("/");
+    } catch (err) {
+      console.log(
+        err,
+        "error calling create crowdfund function on market contract"
+      );
+    }
   }
 
   return (
@@ -131,7 +141,7 @@ function Create() {
       <NavBar searchQuery={""} setSearchQuery={undefined} />
       {isConnected && (
         <div className={styles.page}>
-          <div className={styles.form}>
+          <form className={styles.form}>
             <input
               placeholder="Name"
               className={styles.input}
@@ -172,11 +182,11 @@ function Create() {
               className={styles.input}
               onChange={onFileChange}
             />
-            {fileUrl && <img width="350" src={fileUrl as string} />}
+            {fileUrl && <img width="350" src={fileUrl as string} className={styles.displayPhoto}/>}
             <button onClick={createFundraiser} className={styles.submit}>
               Create Defi Crowdfund
             </button>
-          </div>
+          </form>
         </div>
       )}
     </div>
