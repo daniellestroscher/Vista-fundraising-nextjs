@@ -66,7 +66,7 @@ describe("MyProjects", () => {
     await waitFor(() => render(<MyProjects />));
     await waitFor(() =>
       expect(
-        screen.getByText("You haven't created any crowdfunds.")
+        screen.getByText("You haven't created any fundraisers.")
       ).toBeInTheDocument()
     );
   });

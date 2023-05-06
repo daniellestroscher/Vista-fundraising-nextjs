@@ -1,6 +1,4 @@
-import { ethers } from "ethers";
 import { CrowdfundWithMeta } from "./types";
-import { CrowdfundAbi, MarketAbi, MarketAddress } from "../config";
 
 export const filterFunds = (fundList: CrowdfundWithMeta[], query: string) => {
   if (!query) {

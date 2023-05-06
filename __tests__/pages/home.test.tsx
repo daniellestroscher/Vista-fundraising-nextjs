@@ -66,7 +66,7 @@ describe("Home", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText("No Crowdfunds in this marketplace.")
+        screen.getByText("No fundraisers in this marketplace.")
       ).toBeInTheDocument()
     );
   });
