@@ -11,23 +11,9 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import {
-  arbitrum,
-  mainnet,
-  polygon,
-  polygonMumbai,
-  goerli,
-  localhost,
-} from "wagmi/chains";
+import { mainnet, polygonMumbai, goerli, localhost } from "wagmi/chains";
 
-const chainList = [
-  goerli,
-  polygonMumbai,
-  polygon,
-  localhost,
-  arbitrum,
-  mainnet,
-];
+const chainList = [polygonMumbai, goerli, localhost, mainnet];
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider } = configureChains(chainList, [

@@ -38,7 +38,7 @@
   right: 20px;
   bottom: 20px;
   padding: 10px 20px 10px 20px;
-  border-radius:10px;
+  border-radius: 10px;
   background-color: rgb(196, 207, 255);
   border: 5px solid white;
 }
@@ -48,7 +48,7 @@
   border: 2px solid white;
   background-color: rgb(173, 212, 181);
   color: rgb(4, 30, 125);
-  letter-spacing:5px;
+  letter-spacing: 5px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -64,11 +64,13 @@
   padding: 10px;
 }
 .descriptionShort {
-  padding-bottom: 25px;
+  text-align: center;
+  padding: 25px 20px;
   border-bottom: 2px solid rgb(196, 207, 255);
 }
 .descriptionLong {
-  padding: 20px
+  text-align: center;
+  padding: 20px;
 }
 
 .goalStatsBox {
