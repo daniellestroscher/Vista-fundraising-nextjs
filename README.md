@@ -2,11 +2,11 @@
 This is a fundraising app built with Next.js and Hardhat where users can add fundraising projects for causes they love, or contribute to others. The app interacts with a smart contracts currently deployed on the Mumbai testnet or alterantively, you can open the project and deploy it on a local network.
 
 <div style="display: flex; flex-direction: row;">
-  <img src="https://user-images.githubusercontent.com/110689119/237007578-d8bf2423-d89e-4d63-bce4-31301c62d2dc.png" alt="Image description" width="500" height="300">
-  <img src="https://user-images.githubusercontent.com/110689119/237008139-c9978dcc-4b3b-4eb7-80c9-9da73c55be1e.png" alt="Image description" width="500" height="300">
-  <img src="https://user-images.githubusercontent.com/110689119/237008407-bf797068-5a6d-4893-8077-c5df2c08ad5b.png" alt="Image description" width="500" height="300">
-  <img src="https://user-images.githubusercontent.com/110689119/237008208-02a7e89a-1a14-4726-b4c4-4088f78521d1.png" alt="Image description" width="500" height="300">
-  <img src="https://user-images.githubusercontent.com/110689119/237008451-5321aa6e-fe58-4586-b94f-f0f1e70ebf21.png" alt="Image description" width="500" height="300">
+  <img src="https://user-images.githubusercontent.com/110689119/237010708-9a9b29ab-47c4-44c9-880c-5f2ea03b69d0.png" alt="Image description" width="560" height="350">
+  <img src="https://user-images.githubusercontent.com/110689119/237007578-d8bf2423-d89e-4d63-bce4-31301c62d2dc.png" alt="Image description" width="560" height="350">
+  <img src="https://user-images.githubusercontent.com/110689119/237008139-c9978dcc-4b3b-4eb7-80c9-9da73c55be1e.png" alt="Image description" width="560" height="350">
+  <img src="https://user-images.githubusercontent.com/110689119/237008208-02a7e89a-1a14-4726-b4c4-4088f78521d1.png" alt="Image description" width="560" height="350">
+  <img src="https://user-images.githubusercontent.com/110689119/237008451-5321aa6e-fe58-4586-b94f-f0f1e70ebf21.png" alt="Image description" width="560" height="350">
 </div>
 
 ## Getting Started
