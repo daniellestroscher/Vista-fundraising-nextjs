@@ -1,7 +1,13 @@
 # Vista Fundraising
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`]
+This is a fundraising app built with Next.js and Hardhat where users can add fundraising projects for causes they love, or contribute to others. The app interacts with a smart contracts currently deployed on the Mumbai testnet or alterantively, you can open the project and deploy it on a local network.
 
-This is a fundraising app built with Next.js where users can add fundraising projects for causes they love, or contribute to others. The app interacts with a smart contracts currently deployed on the Mumbai testnet or alterantively, you can open the project and deploy it on a local network.
+<div style="display: flex; flex-direction: row;">
+  <img src="https://user-images.githubusercontent.com/110689119/237007578-d8bf2423-d89e-4d63-bce4-31301c62d2dc.png" alt="Image description" width="500" height="300">
+  <img src="https://user-images.githubusercontent.com/110689119/237008139-c9978dcc-4b3b-4eb7-80c9-9da73c55be1e.png" alt="Image description" width="500" height="300">
+  <img src="https://user-images.githubusercontent.com/110689119/237008407-bf797068-5a6d-4893-8077-c5df2c08ad5b.png" alt="Image description" width="500" height="300">
+  <img src="https://user-images.githubusercontent.com/110689119/237008208-02a7e89a-1a14-4726-b4c4-4088f78521d1.png" alt="Image description" width="500" height="300">
+  <img src="https://user-images.githubusercontent.com/110689119/237008451-5321aa6e-fe58-4586-b94f-f0f1e70ebf21.png" alt="Image description" width="500" height="300">
+</div>
 
 ## Getting Started
 To get started with the app, you need to add the following files:
@@ -22,7 +28,7 @@ this is the same variable as NEXT_PUBLIC_INFURA_API from the previous instuction
 
 #### only if you want to deploy this contract to other networks will you need.
 **.secret file** in the root of the hardhat-project folder containing a private key for a crypto wallet to deploy from. <br/>
-readFileSync is used to read this secret file so it is not included in the environment varibales which can be less secure for your private key.
+readFileSync is used to read this secret file so it is not included in the environment varibales which can be less secure for your private key. You can find this in the Hardhat config.
 
 ## Install
 Download all the required dependancies:
@@ -35,8 +41,17 @@ cd ../
 ```
 
 ## Open the project
-#### If you want to use localhost:
+#### If you want to use Mumbai testnet:
+This project should be deployed to the mumbai testnet and by default configured to call the proper contract address deployed there. Simply check that your connected wallet is connected to the mumbai testnet and that you have some test MATIC to pay for transactions as well. if you dont, you can use this [faucet](https://faucet.polygon.technology/) or [this one](https://mumbaifaucet.com/). 
 
+Then run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+#### If you want to use localhost:
 start a local node,
 ```bash
 cd hardhat-project
@@ -57,16 +72,6 @@ npm run dev
 yarn dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-#### If you want to use Mumbai testnet:
-This project should be deployed to the mumbai testnet and by default configured to call the proper contract address deployed there. Simply check that your connected wallet is connected to the mumbai testnet and that you have some test MATIC to pay for transactions as well. if you dont, you can use this [faucet](https://faucet.polygon.technology/) or [this one](https://mumbaifaucet.com/). 
-
-Then run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
 
 # Contributing:
 Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or a pull request on this repository.
