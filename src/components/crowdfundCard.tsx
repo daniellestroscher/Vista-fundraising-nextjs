@@ -4,7 +4,7 @@ import styles from "../../styles/components/crowdfundCard.module.css";
 import DonateBox from "./donateBox";
 import { useRouter } from "next/router";
 
-import { CrowdfundAbi } from "../../config";
+import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
 import { useContractRead } from "wagmi";
 import Link from "next/link";
 
@@ -17,13 +17,13 @@ export default function CrowdfundCard({ crowdfund }: props) {
 
   const { data: raised } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
-    abi: CrowdfundAbi,
+    abi: CrowdfundArtifact.abi,
     functionName: "raised",
     watch: true,
   });
   const { data: goalReached } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
-    abi: CrowdfundAbi,
+    abi: CrowdfundArtifact.abi,
     functionName: "goalReached",
     watch: true,
   });
@@ -32,7 +32,7 @@ export default function CrowdfundCard({ crowdfund }: props) {
     setTotalRaised(Number(raised));
   }, [raised, goalReached]);
 
-  //set proper symbol for card category.
+  //TODO: set different symbols for each card category.
   let symbolSrc = "";
   if (crowdfund.category === "Children") {
     symbolSrc = "charity.png";
@@ -99,20 +99,17 @@ export default function CrowdfundCard({ crowdfund }: props) {
 
                 <div className={styles.status}>
                   <p className={styles.progress}>
-                    <strong>{String(crowdfund.goal - totalRaised)}</strong> Wei
-                    needed to reach our goal.
+                    <strong>{String(crowdfund.goal - totalRaised)}</strong>
+                    <br /> Wei needed to reach our goal.
                   </p>
+                </div>
+                <div className={styles.donateOrRemove}>
                   {!goalReached && router.pathname !== "/my-projects" ? (
                     <DonateBox crowdfund={crowdfund} />
                   ) : (
-                    <div>
-                      <button
-                        onClick={removeCrowdfund}
-                        className={styles.remove}
-                      >
-                        Remove
-                      </button>
-                    </div>
+                    <button onClick={removeCrowdfund} className={styles.remove}>
+                      Remove
+                    </button>
                   )}
                 </div>
               </div>

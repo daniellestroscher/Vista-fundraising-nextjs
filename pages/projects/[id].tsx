@@ -4,7 +4,10 @@ import DonateBox from "../../src/components/donateBox";
 import styles from "../../styles/pages/project-info.module.css";
 
 import { Crowdfund, CrowdfundWithMeta } from "../../src/types";
-import { CrowdfundAbi, MarketAbi, MarketAddress } from "../../config";
+import { MarketAddress } from "../../config";
+import MarketArtifact from "../../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+
 import axios from "axios";
 import { useContractRead, useAccount, useBalance } from "wagmi";
 import { readContract, prepareWriteContract, writeContract } from "@wagmi/core";
@@ -20,12 +23,12 @@ export default function ProjectInfo() {
 
   const { data: raised } = useContractRead({
     address: crowdfund?.crowdfundContract as `0x${string}`,
-    abi: CrowdfundAbi,
+    abi: CrowdfundArtifact.abi,
     functionName: "raised",
     watch: true,
   });
 
-  const { data } = useBalance({
+  const { data: balance } = useBalance({
     address: crowdfund?.crowdfundContract as `0x${string}`,
   });
 
@@ -33,7 +36,7 @@ export default function ProjectInfo() {
     if (id) {
       getProject();
     }
-  }, [id, data]);
+  }, [id, balance]);
 
   useEffect(() => {
     setTotalRaised(Number(raised));
@@ -42,7 +45,7 @@ export default function ProjectInfo() {
   async function getProject() {
     const crowdfundObj = (await readContract({
       address: MarketAddress,
-      abi: MarketAbi,
+      abi: MarketArtifact.abi,
       functionName: "getCrowdfund",
       args: [Number(id)],
     })) as Crowdfund;
@@ -63,14 +66,14 @@ export default function ProjectInfo() {
   }
 
   async function withdrawFunds() {
-    if (Number(data) == 0) {
+    if (Number(balance) == 0) {
       alert("This contract has no funds to withdraw.");
       return;
     }
     if (crowdfund) {
       const config = await prepareWriteContract({
         address: crowdfund.crowdfundContract as `0x${string}`,
-        abi: CrowdfundAbi,
+        abi: CrowdfundArtifact.abi,
         functionName: "withdraw",
       });
       const { hash } = await writeContract(config);
@@ -91,7 +94,7 @@ export default function ProjectInfo() {
               <h2 className={styles.pageTitle}>{crowdfund.name}</h2>
               {address === crowdfund.owner ? (
                 <div className={styles.contentContainer}>
-                  <p>Current Contract Balance: {Number(data?.value)} Wei</p>
+                  <p>Current Contract Balance: {Number(balance?.value)} Wei</p>
                   <button className={styles.button} onClick={withdrawFunds}>
                     Withdraw
                   </button>

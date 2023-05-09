@@ -3,7 +3,10 @@ import styles from "../styles/pages/i-support.module.css";
 
 import CrowdfundCard from "../src/components/crowdfundCard";
 import axios from "axios";
-import { CrowdfundAbi, MarketAbi, MarketAddress } from "../config";
+import { MarketAddress } from "../config";
+import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+import CrowdfundArtifact from "../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+
 import { Crowdfund, CrowdfundWithMeta } from "../src/types";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
@@ -25,7 +28,7 @@ function ISupport() {
   async function loadCrowdfunds() {
     const allActiveCrowdfunds = (await readContract({
       address: MarketAddress,
-      abi: MarketAbi,
+      abi: MarketArtifact.abi,
       functionName: "getActiveFundraisers",
       overrides: { from: address },
     })) as Crowdfund[];
@@ -64,7 +67,7 @@ function ISupport() {
       //filter out all except ones that signer has contributed to.
       const donatedToContract = (await readContract({
         address: crowdfundList[i].crowdfundContract as `0x${string}`,
-        abi: CrowdfundAbi,
+        abi: CrowdfundArtifact.abi,
         functionName: "checkIfContributor",
         args: [address],
         overrides: { from: address },

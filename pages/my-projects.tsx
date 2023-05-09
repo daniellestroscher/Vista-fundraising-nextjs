@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/pages/my-projects.module.css";
 import axios from "axios";
-import { MarketAbi, MarketAddress } from "../config";
+import { MarketAddress } from "../config";
+import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+
 import { Crowdfund, CrowdfundWithMeta } from "../src/types";
 import CrowdfundCard from "../src/components/crowdfundCard";
 import { useAccount } from "wagmi";
@@ -24,7 +26,7 @@ function MyProjects() {
   async function loadCrowdfunds() {
     const allMyCrowdfunds = (await readContract({
       address: MarketAddress,
-      abi: MarketAbi,
+      abi: MarketArtifact.abi,
       functionName: "getMyFundraisers",
       overrides: { from: address },
     })) as Crowdfund[];

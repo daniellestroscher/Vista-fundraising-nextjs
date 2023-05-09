@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const fs = require("fs");
 const mnemonic = fs.readFileSync(".secret").toString().trim();
-const projectId = process.env.INFURA_PROJECT_ID;
+const projectId = process.env.INFURA_API;
 
 const config: HardhatUserConfig = {
   solidity: "0.8.19",

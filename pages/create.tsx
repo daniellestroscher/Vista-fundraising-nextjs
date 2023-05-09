@@ -7,13 +7,11 @@ import NavBar from "../src/components/navBar";
 import DropdownMenu from "../src/components/customDropdown";
 
 import { create, IPFSHTTPClient } from "ipfs-http-client";
-import { MarketAddress, MarketAbi } from "../config";
-import Web3Modal from "web3modal";
-import Market from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
-import { ethers } from "ethers";
+import { MarketAddress } from "../config";
+import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
 
 import { Buffer } from "buffer";
-import { useContract, useSigner, useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { prepareWriteContract, writeContract } from "@wagmi/core";
 
 const infuraProjectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
@@ -36,6 +34,7 @@ async function createIpfsClient() {
 }
 
 function Create() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [file, setFile] = useState<File>();
   const [fileUrl, setFileUrl] = useState<string | ArrayBuffer>("");
   const [formInput, setFormInput] = useState({
@@ -47,13 +46,9 @@ function Create() {
   });
   const router = useRouter();
   const { isConnected } = useAccount();
-  //const { data: signer } = useSigner();
-  // const marketContract = useContract({
-  //   address: MarketAddress,
-  //   abi: MarketAbi,
-  //   signerOrProvider: signer,
-  // }) as ethers.Contract;
-
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
   useEffect(() => {
     if (file) {
       let fileReader = new FileReader();
@@ -66,6 +61,9 @@ function Create() {
       };
     }
   }, [file]);
+  if (!hasMounted) {
+    return null;
+  }
 
   function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const imageMimeType = /image\/(png|jpg|jpeg)/i;
@@ -79,14 +77,15 @@ function Create() {
     }
   }
 
-  async function createFundraiser() {
+  async function createFundraiser(e: React.MouseEvent) {
+    e.preventDefault();
     const { name, descriptionShort, descriptionLong, goal, category } =
       formInput;
-    console.log(name, descriptionShort, goal, category, fileUrl);
     if (!name || !descriptionShort || !goal || !fileUrl || !category) {
       alert("missing felids are required");
       return;
     }
+    console.log(name, descriptionShort, goal, category, fileUrl);
 
     const data = JSON.stringify({
       name,
@@ -103,35 +102,26 @@ function Create() {
       const url = `https://fund-meta.infura-ipfs.io/ipfs/${result.path}`;
       postCrowdfund(goal, url);
     } catch (err) {
-      console.log(err, "Error creating IPFS client");
+      console.log(err, "Error creating IPFS client or posting crowdfund");
     }
   }
 
   async function postCrowdfund(goal: number, url: string) {
     try {
-      // const web3Modal = new Web3Modal();
-      // const connection = await web3Modal.connect();
-      // const provider = new ethers.providers.Web3Provider(connection);
-      // const signer = provider.getSigner();
-
-      // const marketContract = new ethers.Contract(
-      //   MarketAddress,
-      //   Market.abi,
-      //   signer
-      // );
-      //const created = await marketContract.createCrowdfund(goal, url);
       let config = await prepareWriteContract({
         address: MarketAddress,
-        abi: MarketAbi,
+        abi: MarketArtifact.abi,
         functionName: "createCrowdfund",
         args: [goal, url],
       });
-      const { hash } = await writeContract(config);
-      if (hash) router.push("/");
+      const data = await writeContract(config);
+      await data.wait();
+      //TODO: ADD LOADING PAGE WHEN WAITING FOR TRANSACTION, BEFORE REDIRECT
+      router.push("/");
     } catch (err) {
       console.log(
         err,
-        "error calling create crowdfund function on market contract"
+        "Error calling createCrowdfund function on Market contract."
       );
     }
   }
@@ -182,9 +172,15 @@ function Create() {
               className={styles.input}
               onChange={onFileChange}
             />
-            {fileUrl && <img width="350" src={fileUrl as string} className={styles.displayPhoto}/>}
+            {fileUrl && (
+              <img
+                width="350"
+                src={fileUrl as string}
+                className={styles.displayPhoto}
+              />
+            )}
             <button onClick={createFundraiser} className={styles.submit}>
-              Create Defi Crowdfund
+              Create Defi Fundraiser
             </button>
           </form>
         </div>

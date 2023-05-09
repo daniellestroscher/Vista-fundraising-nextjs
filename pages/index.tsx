@@ -6,7 +6,9 @@ import CategoryList from "../src/components/categoryList";
 import { filterFunds } from "../src/helperFunctions";
 
 import { Crowdfund, CrowdfundWithMeta } from "../src/types";
-import { MarketAbi, MarketAddress } from "../config";
+import { MarketAddress } from "../config";
+import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+
 import axios from "axios";
 
 import { useAccount } from "wagmi";
@@ -14,9 +16,6 @@ import { readContract } from "@wagmi/core";
 
 import LandingPage from "./landing-page";
 import { act } from "@testing-library/react";
-
-// import { Inter } from "@next/font/google";
-// const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -39,7 +38,7 @@ export default function Home() {
   async function loadCrowdfunds() {
     const allActiveFundraisers = (await readContract({
       address: MarketAddress,
-      abi: MarketAbi,
+      abi: MarketArtifact.abi,
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
 

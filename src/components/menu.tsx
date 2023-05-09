@@ -26,7 +26,6 @@ export default function Menu({ setMenuState, menuState }: props) {
       <Link
         href="/"
         as={`/`}
-        //onClick={() => window.location.replace(`/`)}
         className={`${styles.navItem} ${menuState ? "" : styles.hideOverflow}`}
       >
         <h3>Find places to give.</h3>
@@ -34,7 +33,6 @@ export default function Menu({ setMenuState, menuState }: props) {
       <Link
         href="/create"
         as={`/create`}
-        //onClick={() => window.location.replace(`/create`)}
         className={`${styles.navItem} ${menuState ? "" : styles.hideOverflow}`}
       >
         <h3>Create a new funding project.</h3>
@@ -42,7 +40,6 @@ export default function Menu({ setMenuState, menuState }: props) {
       <Link
         href="/my-projects"
         as={`/my-projects`}
-        //onClick={() => window.location.replace(`/my-projects`)}
         className={`${styles.navItem} ${menuState ? "" : styles.hideOverflow}`}
       >
         <h3>My funding projects.</h3>
@@ -50,7 +47,6 @@ export default function Menu({ setMenuState, menuState }: props) {
       <Link
         href="/i-support"
         as={`/i-support`}
-        //onClick={() => window.location.replace(`/i-support`)}
         className={`${styles.navItem} ${menuState ? "" : styles.hideOverflow}`}
       >
         <h3>Funding project's i support.</h3>

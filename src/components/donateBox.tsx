@@ -1,38 +1,33 @@
 import React, { useState } from "react";
 import styles from "../../styles/components/donateBox.module.css";
-import { ethers } from "ethers";
-import {
-  prepareSendTransaction,
-  prepareWriteContract,
-  sendTransaction,
-  writeContract,
-} from "@wagmi/core";
+import { prepareWriteContract, writeContract } from "@wagmi/core";
 import { CrowdfundWithMeta } from "../types";
-import { CrowdfundAbi } from "../../config";
-import { useAccount } from "wagmi";
+
+import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
 
 type props = {
   crowdfund: CrowdfundWithMeta;
 };
 export default function DonateBox({ crowdfund }: props) {
-  const [contribution, setContribution] = useState<number | undefined>(0);
+  const [contribution, setContribution] = useState<number | string>("");
 
   async function donateToCause() {
-    const config = await prepareSendTransaction({
-      //address: crowdfund.crowdfundContract as `0x${string}`,
-      //abi: CrowdfundAbi,
-      //functionName: "donate",
-      // overrides: {
-      //   from: address,
-      //   value: contribution,
-      // },
-      request: {
-        to: crowdfund.crowdfundContract,
-        value: contribution,
-      },
-    });
-    const { hash } = await sendTransaction(config);
-    console.log(hash, "transaction hash");
+    try {
+      const config = await prepareWriteContract({
+        address: crowdfund.crowdfundContract as `0x${string}`,
+        abi: CrowdfundArtifact.abi,
+        functionName: "donate",
+        overrides: {
+          value: contribution as number,
+        },
+      });
+      const data = await writeContract(config);
+      await data.wait();
+      setContribution("");
+    } catch (err) {
+      console.log(err, "error donating to cause.");
+      alert("Donation amount cannot be 0.");
+    }
   }
 
   return (
@@ -40,6 +35,7 @@ export default function DonateBox({ crowdfund }: props) {
       <input
         className={styles.donateBox}
         type="number"
+        value={contribution}
         onChange={(e) => setContribution(Number(e.target.value))}
         data-testid="donate-input"
       />
