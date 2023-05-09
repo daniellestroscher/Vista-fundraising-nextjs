@@ -26,8 +26,7 @@ INFURA_API=""
 ```
 this is the same variable as NEXT_PUBLIC_INFURA_API from the previous instuction.
 
-#### only if you want to deploy this contract to other networks will you need.
-**.secret file** in the root of the hardhat-project folder containing a private key for a crypto wallet to deploy from. <br/>
+**.secret file** in the root of the hardhat-project folder containing a private key for a crypto wallet address to deploy/compile from. <br/>
 readFileSync is used to read this secret file so it is not included in the environment varibales which can be less secure for your private key. You can find this in the Hardhat config.
 
 ## Install
@@ -38,6 +37,11 @@ npm i
 cd hardhat-project
 npm i
 cd ../
+```
+compile the hardhat project:
+```bash
+cd hardhat-project
+npx hardhat compile
 ```
 
 ## Open the project
