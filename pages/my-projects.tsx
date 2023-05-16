@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styles from "../styles/pages/my-projects.module.css";
 import axios from "axios";
 import { MarketAddress } from "../config";
@@ -16,10 +17,12 @@ function MyProjects() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { address, isConnected } = useAccount();
-
+  const router = useRouter();
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
+    } else {
+      router.push("/")
     }
   }, [isConnected, address]);
 

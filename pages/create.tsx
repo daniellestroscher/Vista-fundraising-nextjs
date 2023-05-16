@@ -47,6 +47,9 @@ function Create() {
   const router = useRouter();
   const { isConnected } = useAccount();
   useEffect(() => {
+    if (!isConnected) router.push("/");
+  }, [isConnected]);
+  useEffect(() => {
     setHasMounted(true);
   }, []);
   useEffect(() => {

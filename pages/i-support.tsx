@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styles from "../styles/pages/i-support.module.css";
 
 import CrowdfundCard from "../src/components/crowdfundCard";
@@ -18,10 +19,13 @@ function ISupport() {
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { address, isConnected } = useAccount();
+  const router = useRouter();
 
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
+    } else {
+      router.push("/");
     }
   }, [isConnected, address]);
 
