@@ -5,33 +5,31 @@ pragma solidity ^0.8.19;
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
+error GoalNotReached();
+
 contract Crowdfund is ReentrancyGuard {
     bool public closed = false;
-    uint public goal;
     bool public goalReached;
     uint public raised;
-    address CrowdfundOwner;
+    uint public immutable GOAL;
+    address public immutable FUND_OWNER;
 
     mapping(address => uint) addressToContribution;
 
     constructor(uint _goal, address _owner) {
-        goal = _goal;
-        CrowdfundOwner = _owner;
+        GOAL = _goal;
+        FUND_OWNER = _owner;
         goalReached = false;
         raised = 0;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == CrowdfundOwner, "You do not own this contract.");
+        require(msg.sender == FUND_OWNER, "You do not own this contract.");
         _;
     }
     event GoalReached(uint totalRaised);
     event FundsReceived(address contributor, uint amount);
     event CrowdfundClosed(uint256 totalRaised);
-
-    function getOwner() public view returns (address) {
-        return CrowdfundOwner;
-    }
 
     function getBalance() public view returns (uint) {
         return address(this).balance;
@@ -43,18 +41,18 @@ contract Crowdfund is ReentrancyGuard {
         addressToContribution[msg.sender] += msg.value;
         raised += msg.value;
         emit FundsReceived(msg.sender, msg.value);
-        if (raised >= goal) updateGoalStatus();
+        if (raised >= GOAL) updateGoalStatus();
     }
 
     function updateGoalStatus() internal {
-        require(raised >= goal, "The goal has not been reached yet.");
+        require(raised >= GOAL, "The goal has not been reached yet.");
         goalReached = true;
         emit GoalReached(raised);
     }
 
     function withdraw() public onlyOwner {
         require(address(this).balance > 0, "sorry, nothing to withdraw.");
-        payable(CrowdfundOwner).transfer(address(this).balance);
+        payable(FUND_OWNER).transfer(address(this).balance);
     }
 
     function checkIfContributor(
@@ -72,7 +70,10 @@ contract Crowdfund is ReentrancyGuard {
         require(!closed, "The contract has already been closed.");
 
         // transfer funds to the owner
-        payable(CrowdfundOwner).transfer(address(this).balance);
+        //payable(FUND_OWNER).transfer(address(this).balance);
+        //USING CALL
+        (bool closeSuccess, ) = payable(FUND_OWNER).call{value:address(this).balance }("");
+        require (closeSuccess, "transfer failed.");
 
         // mark the contract as closed
         closed = true;
@@ -81,10 +82,7 @@ contract Crowdfund is ReentrancyGuard {
 
     //safety functions
     receive() external payable {
-        addressToContribution[msg.sender] += msg.value;
-        raised += msg.value;
-        emit FundsReceived(msg.sender, msg.value);
-        if (raised >= goal) updateGoalStatus();
+        donate();
     }
 
     fallback() external payable {
