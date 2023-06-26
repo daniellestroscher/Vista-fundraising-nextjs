@@ -4,17 +4,20 @@ import styles from "../styles/pages/i-support.module.css";
 
 import CrowdfundCard from "../src/components/crowdfundCard";
 import axios from "axios";
-import { MarketAddress } from "../config";
-import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
-import CrowdfundArtifact from "../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+import networkMapping from "../src/constants/networkMapping.json";
+import MarketArtifact from "../src/constants/CrowdfundMarketplace.json";
+import CrowdfundArtifact from "../src/constants/Crowdfund.json";
 
-import { Crowdfund, CrowdfundWithMeta } from "../src/types";
-import { useAccount } from "wagmi";
+import { Crowdfund, CrowdfundWithMeta, NetworkMappingType } from "../src/types";
+import { useAccount, useNetwork } from "wagmi";
 import { readContract } from "@wagmi/core";
 import NavBar from "../src/components/navBar";
 import { filterFunds } from "../src/helperFunctions";
 
 function ISupport() {
+  const networkMappingTyped = networkMapping as NetworkMappingType;
+  const { chain } = useNetwork();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
@@ -30,9 +33,10 @@ function ISupport() {
   }, [isConnected, address]);
 
   async function loadCrowdfunds() {
+    const MarketAddress = networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const allActiveCrowdfunds = (await readContract({
-      address: MarketAddress,
-      abi: MarketArtifact.abi,
+      address: MarketAddress as `0x${string}`,
+      abi: MarketArtifact,
       functionName: "getActiveFundraisers",
       overrides: { from: address },
     })) as Crowdfund[];
@@ -71,7 +75,7 @@ function ISupport() {
       //filter out all except ones that signer has contributed to.
       const donatedToContract = (await readContract({
         address: crowdfundList[i].crowdfundContract as `0x${string}`,
-        abi: CrowdfundArtifact.abi,
+        abi: CrowdfundArtifact,
         functionName: "checkIfContributor",
         args: [address],
         overrides: { from: address },

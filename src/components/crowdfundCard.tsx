@@ -4,7 +4,7 @@ import styles from "../../styles/components/crowdfundCard.module.css";
 import DonateBox from "./donateBox";
 import { useRouter } from "next/router";
 
-import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+import CrowdfundArtifact from "../constants/Crowdfund.json";
 import { useContractRead } from "wagmi";
 import Link from "next/link";
 
@@ -17,14 +17,14 @@ export default function CrowdfundCard({ crowdfund }: props) {
 
   const { data: raised } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
-    abi: CrowdfundArtifact.abi,
-    functionName: "raised",
+    abi: CrowdfundArtifact,
+    functionName: "getRaised",
     watch: true,
   });
   const { data: goalReached } = useContractRead({
     address: crowdfund.crowdfundContract as `0x${string}`,
-    abi: CrowdfundArtifact.abi,
-    functionName: "goalReached",
+    abi: CrowdfundArtifact,
+    functionName: "getGoalReached",
     watch: true,
   });
 

@@ -5,19 +5,22 @@ import NavBar from "../src/components/navBar";
 import CategoryList from "../src/components/categoryList";
 import { filterFunds } from "../src/helperFunctions";
 
-import { Crowdfund, CrowdfundWithMeta } from "../src/types";
-import { MarketAddress } from "../config";
-import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+import { Crowdfund, CrowdfundWithMeta, NetworkMappingType } from "../src/types";
+import networkMapping from "../src/constants/networkMapping.json";
+import MarketArtifact from "../src/constants/CrowdfundMarketplace.json";
 
 import axios from "axios";
 
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { readContract } from "@wagmi/core";
 
 import LandingPage from "./landing-page";
 import { act } from "@testing-library/react";
 
 export default function Home() {
+  const networkMappingTyped = networkMapping as NetworkMappingType;
+  const { chain } = useNetwork();
+
   const [hasMounted, setHasMounted] = useState(false);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
@@ -36,14 +39,18 @@ export default function Home() {
   }
 
   async function loadCrowdfunds() {
+    const MarketAddress =
+      networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const allActiveFundraisers = (await readContract({
-      address: MarketAddress,
-      abi: MarketArtifact.abi,
+      address: MarketAddress as `0x${string}`,
+      abi: MarketArtifact,
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
+    console.log(allActiveFundraisers, "ACTIVE");
 
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
+        console.log(crowdfund);
         const meta = await axios.get(crowdfund.metaUrl);
         return {
           fundId: Number(crowdfund.fundId),

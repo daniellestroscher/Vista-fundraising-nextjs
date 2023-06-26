@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../styles/pages/my-projects.module.css";
 import axios from "axios";
-import { MarketAddress } from "../config";
-import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+import networkMapping from "../src/constants/networkMapping.json";
+import MarketArtifact from "../src/constants/CrowdfundMarketplace.json";
 
-import { Crowdfund, CrowdfundWithMeta } from "../src/types";
+import { Crowdfund, CrowdfundWithMeta, NetworkMappingType } from "../src/types";
 import CrowdfundCard from "../src/components/crowdfundCard";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { readContract } from "@wagmi/core";
 import NavBar from "../src/components/navBar";
 import { filterFunds } from "../src/helperFunctions";
 
 function MyProjects() {
+  const networkMappingTyped = networkMapping as NetworkMappingType;
+  const { chain } = useNetwork();
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
@@ -27,9 +30,10 @@ function MyProjects() {
   }, [isConnected, address]);
 
   async function loadCrowdfunds() {
+    const MarketAddress = networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const allMyCrowdfunds = (await readContract({
-      address: MarketAddress,
-      abi: MarketArtifact.abi,
+      address: MarketAddress as `0x${string}`,
+      abi: MarketArtifact,
       functionName: "getMyFundraisers",
       overrides: { from: address },
     })) as Crowdfund[];

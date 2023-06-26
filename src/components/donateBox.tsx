@@ -3,7 +3,7 @@ import styles from "../../styles/components/donateBox.module.css";
 import { prepareWriteContract, writeContract } from "@wagmi/core";
 import { CrowdfundWithMeta } from "../types";
 
-import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+import CrowdfundArtifact from "../constants/Crowdfund.json";
 
 type props = {
   crowdfund: CrowdfundWithMeta;
@@ -15,7 +15,7 @@ export default function DonateBox({ crowdfund }: props) {
     try {
       const config = await prepareWriteContract({
         address: crowdfund.crowdfundContract as `0x${string}`,
-        abi: CrowdfundArtifact.abi,
+        abi: CrowdfundArtifact,
         functionName: "donate",
         overrides: {
           value: contribution as number,

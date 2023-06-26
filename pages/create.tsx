@@ -7,12 +7,13 @@ import NavBar from "../src/components/navBar";
 import DropdownMenu from "../src/components/customDropdown";
 
 import { create, IPFSHTTPClient } from "ipfs-http-client";
-import { MarketAddress } from "../config";
-import MarketArtifact from "../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
+import networkMapping from "../src/constants/networkMapping.json";
+import MarketArtifact from "../src/constants/CrowdfundMarketplace.json";
 
 import { Buffer } from "buffer";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { prepareWriteContract, writeContract } from "@wagmi/core";
+import { NetworkMappingType } from "../src/types";
 
 const infuraProjectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
 const apiKeySecret = process.env.NEXT_PUBLIC_INFURA_SECRET;
@@ -34,6 +35,9 @@ async function createIpfsClient() {
 }
 
 function Create() {
+  const networkMappingTyped = networkMapping as NetworkMappingType;
+  const { chain } = useNetwork();
+
   const [hasMounted, setHasMounted] = useState(false);
   const [file, setFile] = useState<File>();
   const [fileUrl, setFileUrl] = useState<string | ArrayBuffer>("");
@@ -111,9 +115,11 @@ function Create() {
 
   async function postCrowdfund(goal: number, url: string) {
     try {
+      const MarketAddress =
+        networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
       let config = await prepareWriteContract({
-        address: MarketAddress,
-        abi: MarketArtifact.abi,
+        address: MarketAddress as `0x${string}`,
+        abi: MarketArtifact,
         functionName: "createCrowdfund",
         args: [goal, url],
       });

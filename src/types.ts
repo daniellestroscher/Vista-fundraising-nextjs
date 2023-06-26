@@ -1,13 +1,13 @@
 export interface Crowdfund {
-  fundId: number,
-  metaUrl: string,
+  fundId: number;
+  metaUrl: string;
   crowdfundContract: string;
   owner: string;
   goal: number;
   goalReached: boolean;
 }
 export interface CrowdfundWithMeta {
-  fundId: number,
+  fundId: number;
   crowdfundContract: string;
   name: string;
   descriptionShort: string;
@@ -17,4 +17,9 @@ export interface CrowdfundWithMeta {
   owner: string;
   goal: number;
   goalReached: boolean;
+}
+export interface NetworkMappingType {
+  [key: number]: {
+    CrowdfundMarketplace: string[];
+  };
 }
