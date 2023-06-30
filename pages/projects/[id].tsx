@@ -3,13 +3,17 @@ import { useRouter } from "next/router";
 import DonateBox from "../../src/components/donateBox";
 import styles from "../../styles/pages/project-info.module.css";
 
-import { Crowdfund, CrowdfundWithMeta } from "../../src/types";
-import { MarketAddress } from "../../config";
-import MarketArtifact from "../../hardhat-project/artifacts/contracts/CrowdfundMarket.sol/CrowdfundMarket.json";
-import CrowdfundArtifact from "../../hardhat-project/artifacts/contracts/Crowdfund.sol/Crowdfund.json";
+import {
+  Crowdfund,
+  CrowdfundWithMeta,
+  NetworkMappingType,
+} from "../../src/types";
+import networkMapping from "../../src/constants/networkMapping.json";
+import MarketArtifact from "../../src/constants/CrowdfundMarketplace.json";
+import CrowdfundArtifact from "../../src/constants/Crowdfund.json";
 
 import axios from "axios";
-import { useContractRead, useAccount, useBalance } from "wagmi";
+import { useContractRead, useAccount, useBalance, useNetwork } from "wagmi";
 import { readContract, prepareWriteContract, writeContract } from "@wagmi/core";
 import NavBar from "../../src/components/navBar";
 
@@ -17,14 +21,17 @@ export default function ProjectInfo() {
   const router = useRouter();
   const { id } = router.query;
 
+  const networkMappingTyped = networkMapping as NetworkMappingType;
+  const { chain } = useNetwork();
+
   const [crowdfund, setCrowdfund] = useState<CrowdfundWithMeta>();
   const [totalRaised, setTotalRaised] = useState<Number>();
   const { address } = useAccount();
 
   const { data: raised } = useContractRead({
     address: crowdfund?.crowdfundContract as `0x${string}`,
-    abi: CrowdfundArtifact.abi,
-    functionName: "raised",
+    abi: CrowdfundArtifact,
+    functionName: "getRaised",
     watch: true,
   });
 
@@ -43,9 +50,11 @@ export default function ProjectInfo() {
   }, [raised]);
 
   async function getProject() {
+    const MarketAddress =
+      networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const crowdfundObj = (await readContract({
-      address: MarketAddress,
-      abi: MarketArtifact.abi,
+      address: MarketAddress as `0x${string}`,
+      abi: MarketArtifact,
       functionName: "getCrowdfund",
       args: [Number(id)],
     })) as Crowdfund;
@@ -73,7 +82,7 @@ export default function ProjectInfo() {
     if (crowdfund) {
       const config = await prepareWriteContract({
         address: crowdfund.crowdfundContract as `0x${string}`,
-        abi: CrowdfundArtifact.abi,
+        abi: CrowdfundArtifact,
         functionName: "withdraw",
       });
       const { hash } = await writeContract(config);

@@ -32,7 +32,7 @@ export default function Home() {
     if (isConnected) {
       loadCrowdfunds();
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, chain]);
 
   if (!hasMounted) {
     return null;
@@ -46,11 +46,9 @@ export default function Home() {
       abi: MarketArtifact,
       functionName: "getActiveFundraisers",
     })) as Crowdfund[];
-    console.log(allActiveFundraisers, "ACTIVE");
 
     const crowdfundList = (await Promise.all(
       allActiveFundraisers.map(async (crowdfund: Crowdfund) => {
-        console.log(crowdfund);
         const meta = await axios.get(crowdfund.metaUrl);
         return {
           fundId: Number(crowdfund.fundId),
@@ -67,11 +65,8 @@ export default function Home() {
       })
     )) as CrowdfundWithMeta[];
 
-    act(() => {
-      /* in function for testing purposes */
-      setCrowdfundArr(crowdfundList);
-      setLoadingState("loaded");
-    });
+    setCrowdfundArr(crowdfundList);
+    setLoadingState("loaded");
   }
 
   const searchableCrowdfunds = filterFunds(crowdfundArr, searchQuery);

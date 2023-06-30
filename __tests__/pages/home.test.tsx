@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import Home from "../../pages/index";
 import { readContract } from "@wagmi/core";
 import { useAccount } from "wagmi";
@@ -35,6 +36,9 @@ jest.mock("wagmi", () => {
     useAccount: jest
       .fn()
       .mockImplementation(() => ({ isConnected: true, address: "0x123" })),
+    useNetwork: jest.fn().mockImplementation(() => ({
+      chain: { id: 31337 },
+    })),
   };
 });
 jest.mock("axios", () => ({
@@ -52,16 +56,18 @@ jest.mock("axios", () => ({
 }));
 
 describe("Home", () => {
-  test("renders without crashing", () => {
+  test("renders without crashing", async () => {
     render(<Home />);
-    expect(screen.getByRole("main")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByRole("main")).toBeInTheDocument();
+    });
   });
 
   test("displays a message when no crowdfunds are available", async () => {
     (readContract as jest.Mock).mockImplementation(() => {
       return [];
     });
-
     render(<Home />);
 
     await waitFor(() =>
@@ -84,16 +90,15 @@ describe("Home", () => {
         },
       ];
     });
+    render(<Home />);
 
-    await waitFor(() => render(<Home />));
     await waitFor(() => expect(screen.getAllByRole("list")).toBeDefined());
   });
 
-  test("displays the landing page and connect button when use is not connected", () => {
+  test("displays the landing page and connect button when use is not connected", async () => {
     (useAccount as jest.Mock).mockImplementation(() => {
       return { isConnected: false };
     });
-
     render(<Home />);
 
     const connectButton = screen.getByText("Mock ConnectButton");
@@ -104,10 +109,11 @@ describe("Home", () => {
     const banner = screen.getByText(
       "Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet Connect-Wallet"
     );
-
-    expect(connectButton).toBeInTheDocument();
-    expect(welcome).toBeInTheDocument();
-    expect(banner).toBeInTheDocument();
-    expect(page).toBeDefined();
+    await waitFor(() => {
+      expect(connectButton).toBeInTheDocument();
+      expect(welcome).toBeInTheDocument();
+      expect(banner).toBeInTheDocument();
+      expect(page).toBeDefined();
+    });
   });
 });

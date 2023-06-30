@@ -3,38 +3,49 @@ import type { AppProps } from "next/app";
 
 import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
+  connectorsForWallets,
   getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { mainnet, polygonMumbai, sepolia, hardhat } from "wagmi/chains";
 
-const chainList = [polygonMumbai, sepolia, hardhat, mainnet];
-
 export default function App({ Component, pageProps }: AppProps) {
-  const { chains, provider } = configureChains(chainList, [
-    publicProvider({ priority: 1 }),
-    infuraProvider({
-      apiKey: process.env.NEXT_PUBLIC_INFURA_API as string,
-      priority: 1,
-    }),
-  ]);
-  const { connectors } = getDefaultWallets({
-    appName: "Defi-Crowdfund",
+  const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
+  const { chains, publicClient } = configureChains(
+    [hardhat, sepolia, polygonMumbai, mainnet],
+    [
+      publicProvider(),
+      alchemyProvider({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API as string,
+      }),
+      infuraProvider({
+        apiKey: process.env.NEXT_PUBLIC_INFURA_API as string,
+      }),
+    ]
+  );
+  const { wallets } = getDefaultWallets({
+    appName: "Defi-Crowdfund App",
+    projectId,
     chains,
   });
-  const wagmiClient = createClient({
+  const connectors = connectorsForWallets([
+    ...wallets,
+  ]);
+
+  const config = createConfig({
     autoConnect: true,
-    connectors, //connectors: w3mConnectors({ projectId, version: 1, chains }),
-    provider,
+    connectors: connectors,
+    publicClient
   });
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={config}>
       <RainbowKitProvider
         chains={chains}
         theme={lightTheme({

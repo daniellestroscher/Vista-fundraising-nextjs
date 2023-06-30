@@ -13,6 +13,7 @@ import { useAccount, useNetwork } from "wagmi";
 import { readContract } from "@wagmi/core";
 import NavBar from "../src/components/navBar";
 import { filterFunds } from "../src/helperFunctions";
+import { act } from "@testing-library/react";
 
 function ISupport() {
   const networkMappingTyped = networkMapping as NetworkMappingType;
@@ -30,15 +31,15 @@ function ISupport() {
     } else {
       router.push("/");
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, chain]);
 
   async function loadCrowdfunds() {
-    const MarketAddress = networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
+    const MarketAddress =
+      networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const allActiveCrowdfunds = (await readContract({
       address: MarketAddress as `0x${string}`,
       abi: MarketArtifact,
       functionName: "getActiveFundraisers",
-      overrides: { from: address },
     })) as Crowdfund[];
 
     let crowdfundList = (await Promise.all(
@@ -78,7 +79,6 @@ function ISupport() {
         abi: CrowdfundArtifact,
         functionName: "checkIfContributor",
         args: [address],
-        overrides: { from: address },
       })) as Crowdfund[];
 
       if (donatedToContract) {

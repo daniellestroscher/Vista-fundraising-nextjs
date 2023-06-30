@@ -50,9 +50,11 @@ function Create() {
   });
   const router = useRouter();
   const { isConnected } = useAccount();
+
   useEffect(() => {
     if (!isConnected) router.push("/");
   }, [isConnected]);
+
   useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -124,7 +126,7 @@ function Create() {
         args: [goal, url],
       });
       const data = await writeContract(config);
-      await data.wait();
+
       //TODO: ADD LOADING PAGE WHEN WAITING FOR TRANSACTION, BEFORE REDIRECT
       router.push("/");
     } catch (err) {

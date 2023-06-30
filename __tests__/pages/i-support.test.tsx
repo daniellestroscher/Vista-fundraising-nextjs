@@ -54,6 +54,9 @@ jest.mock("wagmi", () => {
     useAccount: jest
       .fn()
       .mockImplementation(() => ({ isConnected: true, address: "0x123" })),
+    useNetwork: jest.fn().mockImplementation(() => ({
+      chain: { id: 31337 },
+    })),
     useContractRead: jest.fn().mockImplementation(() => 1000),
   };
 });
@@ -99,8 +102,8 @@ describe("MyProjects", () => {
     await waitFor(() => render(<ISupport />));
     await waitFor(() => {
       expect(screen.getByText("Test Crowdfund One")).toBeInTheDocument();
+      expect(screen.getByText("short description")).toBeInTheDocument();
     });
-    expect(screen.getByText("short description")).toBeInTheDocument();
   });
 
   test("filters crowdfunds based on search query", async () => {
@@ -111,13 +114,17 @@ describe("MyProjects", () => {
     const input = screen.getByPlaceholderText("Search by name or category");
 
     fireEvent.mouseEnter(container as ParentNode);
-    act(() => {
-      fireEvent.input(input, { target: { value: "New Query" } });
+
+    fireEvent.input(input, { target: { value: "New Query" } });
+
+    await waitFor(() => {
+      expect(screen.queryByText("Test Crowdfund One")).not.toBeInTheDocument();
     });
-    expect(screen.queryByText("Test Crowdfund One")).not.toBeInTheDocument();
-    act(() => {
-      fireEvent.input(input, { target: { value: "test" } });
+
+    fireEvent.input(input, { target: { value: "test" } });
+
+    await waitFor(() => {
+      expect(screen.queryByText("Test Crowdfund One")).toBeInTheDocument();
     });
-    expect(screen.queryByText("Test Crowdfund One")).toBeInTheDocument();
   });
 });

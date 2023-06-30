@@ -17,16 +17,11 @@ export default function DonateBox({ crowdfund }: props) {
         address: crowdfund.crowdfundContract as `0x${string}`,
         abi: CrowdfundArtifact,
         functionName: "donate",
-        overrides: {
-          value: contribution as number,
-        },
       });
       const data = await writeContract(config);
-      await data.wait();
       setContribution("");
     } catch (err) {
       console.log(err, "error donating to cause.");
-      alert("Donation amount cannot be 0.");
     }
   }
 

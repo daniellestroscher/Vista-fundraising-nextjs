@@ -15,27 +15,28 @@ import { filterFunds } from "../src/helperFunctions";
 function MyProjects() {
   const networkMappingTyped = networkMapping as NetworkMappingType;
   const { chain } = useNetwork();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [crowdfundArr, setCrowdfundArr] = useState<CrowdfundWithMeta[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { address, isConnected } = useAccount();
   const router = useRouter();
+
   useEffect(() => {
     if (isConnected) {
       loadCrowdfunds();
     } else {
-      router.push("/")
+      router.push("/");
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, chain]);
 
   async function loadCrowdfunds() {
-    const MarketAddress = networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
+    const MarketAddress =
+      networkMappingTyped[chain!.id]["CrowdfundMarketplace"][0];
     const allMyCrowdfunds = (await readContract({
       address: MarketAddress as `0x${string}`,
       abi: MarketArtifact,
       functionName: "getMyFundraisers",
-      overrides: { from: address },
     })) as Crowdfund[];
 
     const crowdfundList = (await Promise.all(

@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: "jsdom",
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+    //"^.+\\.css$": ["jest-transform-css", { modules: true }]
   },
   transformIgnorePatterns: [
     "/node_modules/",
